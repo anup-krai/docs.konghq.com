@@ -2,14 +2,12 @@
 title: Health Checks and Circuit Breakers Reference
 ---
 
-## Introduction
-
 You can make an API proxied by Kong use a [ring-balancer][ringbalancer], configured
 by adding an [upstream][upstream] entity that contains one or more [target][ringtarget]
 entities, each target pointing to a different IP address (or hostname) and
 port. The ring-balancer will balance load among the various targets, and based
 on the [upstream][upstream] configuration, will perform health checks on the targets,
-making them as healthy or unhealthy whether they are responsive or not. The
+marking them as healthy or unhealthy based on whether they are responsive or not. The
 ring-balancer will then only route traffic to healthy targets.
 
 Kong supports two kinds of health checks, which can be used separately or in
@@ -21,7 +19,7 @@ response;
 
 * **passive checks** (also known as **circuit breakers**), where Kong analyzes
 the ongoing traffic being proxied and determines the health of targets based
-on their behavior responding requests.
+on their behavior responding to requests.
 
 ## Defining "healthy" and "unhealthy"
 
@@ -244,7 +242,7 @@ active health checks on `healthy` status to zero, and active checks on
 ### Enabling active health checks
 
 To enable active health checks, you need to specify the configuration items
-under `healthchecks.active` in the [Upstream object][upstreamobjects] configuration. You
+under `healthchecks.active` in the [Upstream object][upstreamobject] configuration. You
 need to specify the necessary information so that Kong can perform periodic
 probing on the target, and how to interpret the resulting information.
 
@@ -358,6 +356,6 @@ upstreams.
 [targetobject]: /enterprise/{{page.kong_version}}/admin-api#target-object
 [addupstream]: /enterprise/{{page.kong_version}}/admin-api#add-upstream
 [clustering]: /enterprise/{{page.kong_version}}/clustering
-[upstreamobjects]: /enterprise/{{page.kong_version}}/admin-api#upstream-objects
+[upstreamobject]: /enterprise/{{page.kong_version}}/admin-api#upstream-object
 [balancercaveats]: /enterprise/{{page.kong_version}}/loadbalancing#balancing-caveats
 [dnscaveats]: /enterprise/{{page.kong_version}}/loadbalancing#dns-caveats

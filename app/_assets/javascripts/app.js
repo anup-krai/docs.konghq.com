@@ -22,6 +22,7 @@ jQuery(function () {
       },
       700
     );
+    history.pushState({}, '', $(this).attr("href"));
   });
 
   // Active link
@@ -32,12 +33,36 @@ jQuery(function () {
     activeNav.parents(".accordion-item").addClass("active");
   };
 
+  // Open active sidebar section in left nav
+  $(".docs-sidebar a.active, li.accordion-item.active").each(function (
+    index,
+    a
+  ) {
+    $(a)
+      .parents("li.accordion-item")
+      .each(function (index, item) {
+        $(item).addClass("active");
+        $(item).find("> input").prop("checked", true);
+      });
+  });
+
+// Function to close menus on pressing the "Escape" key
+  function closeDropdownOnEscape () {
+    if (event.key === 'Escape') {
+      $('#module-list').removeClass('open');
+      $('#version-list').removeClass('open');
+    }
+  };
+
   // MODULE DROPDOWN: dropdown menu functionality (handles main product dropdown)
-  $("#module-dropdown").on("click", function (e) {
+
+  // Actions that occur on click and escape button press
+  $('#module-dropdown').on('click', function (e) {
     e.preventDefault();
     e.stopPropagation();
 
-    $("#module-list").toggleClass("open");
+    $('#module-list').toggleClass('open');
+    $('#version-list').removeClass('open');
 
     $(document).one('click', function closeMenu(e) {
       if ($('#module-list').has(e.target).length === 0) {
@@ -45,15 +70,52 @@ jQuery(function () {
       } else {
         $(document).one('click', closeMenu);
       }
+    }).on('keypress keydown', function(e) {
+        closeDropdownOnEscape()
+    });
+  });
+
+  // Enables tabbing through the module menu
+  $('#module-dropdown').on('keypress keydown', function(e) {
+    if(e.keyCode == 13) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    $('#module-list')
+      .toggleClass('open')
+      .setAttribute('aria-hidden', 'false')
+      .setAttribute('aria-expanded', 'true');
+    return false;
+    }
+   // if user doesn't open product submenu, move focus to version menu item
+    let submenu = $('#module-list')
+    if(!submenu.hasClass('open')) {
+      $('#version-list').focus();
+    }
+
+    // close docs dropdown menu when tabbing to the version dropdown
+    $('#version-dropdown').on('focus', function(e) {
+      $('#module-list').removeClass('open');
+    });
+
+    // close product or version dropdown menu when tabbing on the first navigation menu item
+    $('.accordion-link').on('focus', function(e) {
+      $('#module-list').removeClass('open');
+      $('#version-list').removeClass('open');
+    });
+
+    $(document).on('keypress keydown', function(e) {
+        closeDropdownOnEscape()
     });
   });
 
   // VERSION DROPDOWN: dropdown menu functionality (handles plugin detail page, lua, and main versions dropdown)
-  $("#version-dropdown").on("click", function (e) {
+  $('#version-dropdown').on('click', function (e) {
     e.preventDefault();
     e.stopPropagation();
 
-    $("#version-list").toggleClass("open");
+    $('#version-list').toggleClass('open');
+    $('#module-list').removeClass('open');
 
     $(document).one('click', function closeMenu(e) {
       if ($('#version-list').has(e.target).length === 0) {
@@ -61,33 +123,45 @@ jQuery(function () {
       } else {
         $(document).one('click', closeMenu);
       }
+    }).on('keypress keydown', function(e) {
+        closeDropdownOnEscape()
     });
   });
 
-    // COMPAT DROPDOWN: dropdown menu functionality (handles /konnect-platform/compatibility dropdown)
-    $("#compat-dropdown").on("click", function(e) {
-      e.preventDefault();
-      e.stopPropagation();
-
-      $("#compat-list").toggleClass("open");
-
-      $(document).one('click', function closeMenu (e){
-          if($('#compat-list').has(e.target).length === 0){
-              $('#compat-list').removeClass('open');
-          } else {
-              $(document).one('click', closeMenu);
-          }
-      });
-    });
-
-  // COOKIE MODAL: Hide banner on "I accept" and set cookie
-  $(".cookie-policy-accept").on("click", function (e) {
+  // Enables tabbing through the version menu
+  $('#version-dropdown').on('keypress keydown', function(e) {
+    if(e.keyCode == 13) {
     e.preventDefault();
+    e.stopPropagation();
 
-    $(".cookie-policy-container").removeClass("showing");
-    $(".page").removeClass("page-cookie-policy");
-    setCookie("cookie-policy", "agreed");
+    $('#version-list')
+      .toggleClass('open')
+      .setAttribute('aria-hidden', 'false')
+      .setAttribute('aria-expanded', 'true');
+    return false;
+    }
+    $(document).on('keypress keydown', function(e) {
+      closeDropdownOnEscape ()
+    });
   });
+
+  // COMPAT DROPDOWN: dropdown menu functionality (handles /archive/konnect-platform/compatibility dropdown. Currently not in use.)
+  // $("#compat-dropdown").on("click", function(e) {
+  //   e.preventDefault();
+  //   e.stopPropagation();
+  //
+  //   $("#compat-list").toggleClass("open");
+  //
+  //   $(document).one('click', function closeMenu (e){
+  //       if($('#compat-list').has(e.target).length === 0){
+  //           $('#compat-list').removeClass('open');
+  //       } else {
+  //           $(document).one('click', closeMenu);
+  //       }
+  //   });
+  // });
+
+  // Cookie functions
 
   function getCookie(cname) {
     var name = cname + "=";
@@ -262,16 +336,113 @@ jQuery(function () {
     ); // Adjust scroll speed
   }
 
+
+// Plugin filter all / only available
+var pluginsAllOrOnly = "all";
+var showPlusWithEnterprise = false;
+function showPluginBanner(target){
+  var hubCards = $(".hub-cards");
+  if (!hubCards.length){
+    return;
+  }
+
+  var allOnlyToggle = $('#plugin-banner');
+  var eePlusBanner = $('#ee-plus-banner');
+
+  var allowedFilters = ["plus", "ee-compat"]
+  if (allowedFilters.indexOf(target) === -1){
+    pluginsAllOrOnly = "all";
+    allOnlyToggle.hide();
+    return;
+  }
+
+  allOnlyToggle.show();
+
+  if (!allOnlyToggle.length){
+    allOnlyToggle = $('<div id="plugin-banner" class="content" style="padding:0"><blockquote class="note"></blockquote></div>');
+    hubCards.prepend(allOnlyToggle)
+  }
+
+  if (!eePlusBanner.length){
+    eePlusBanner = $('<div id="ee-plus-banner" class="content" style="padding:0"><blockquote class="important">If you run Kong Gateway on your own infrastructure, you also have access to all <strong>Plus</strong> plugins. <u id="show-plus-ee">Show Plus plugins?</u></blockquote></div>');
+    eePlusBanner.find("u").css({cursor: "pointer"}).click(function(){
+      showPlusWithEnterprise = true;
+      pluginFilter(target);
+      return false;
+    });
+    allOnlyToggle.after(eePlusBanner)
+  }
+
+  eePlusBanner.hide();
+
+  if (pluginsAllOrOnly == "only" && target == "ee-compat" && showPlusWithEnterprise == false){
+    eePlusBanner.show();
+  }
+
+  var tierMap = {
+    "plus": "Plus",
+    "ee-compat": "Enterprise"
+  }
+
+  var content = allOnlyToggle.find("blockquote");
+
+  if (pluginsAllOrOnly == "all"){
+    content.html("Showing <strong>all</strong> plugins available on the " + tierMap[target] + " tier. <u>Show " + tierMap[target] + " only plugins?</u>")
+  } else {
+    content.html("Showing plugins <strong>only</strong> available on the " + tierMap[target] + " tier. <u>Show <strong>all</strong> " + tierMap[target] + " plugins?</u>")
+  }
+  content.find("u").css({"cursor":"pointer"}).click(function(){
+    var other = pluginsAllOrOnly == "all" ? "only" : "all";
+    pluginsAllOrOnly = other;
+    showPlusWithEnterprise = false;
+    pluginFilter(target);
+    return false;
+  });
+
+}
+
+
 // Plugins filter on click
 $("a[data-filter]").on("click", function () {
-  $("html, body").animate({ scrollTop: 0 });
   var target = $(this).data("filter");
-  console.log(this);
 
   // Remove any active classes that may already be applied
   $("a[data-filter]").removeClass("active");
   // Add active class sidebar a
   $(this).addClass("active");
+  pluginFilter(target);
+});
+
+// Plugin filter on keypress
+$("a[data-filter]").on("keypress", function(e) {
+  if (e.keyCode === 13) {
+    var target = $(this).data("filter");
+    $("a[data-filter]").removeClass("active");
+    $(this).addClass("active");
+
+    pluginFilter(target);
+  }
+});
+
+function pluginFilter(target){
+  $("html, body").animate({ scrollTop: 0 });
+  if (!target){
+    target = "all";
+  }
+  showPluginBanner(target)
+
+  var excluded = [];
+  if (pluginsAllOrOnly == "only"){
+    if (target == "plus"){
+      excluded = ["open-source"];
+    } else if (target == "ee-compat"){
+      excluded = ["open-source"];
+      if (!showPlusWithEnterprise){
+        excluded.push("plus");
+      }
+    }
+  }
+
 
   // For all faded cards, replace href with data-href target
   $(".card-group.fadeOut").each(function () {
@@ -282,6 +453,7 @@ $("a[data-filter]").on("click", function () {
 
   // Remove any fade states that may already be applied
   $(".card-group").removeClass("fadeOut");
+  $(".nav-link, .category").show();
 
   // If the target of the li is not all continue
   if (target !== "all") {
@@ -289,6 +461,14 @@ $("a[data-filter]").on("click", function () {
     $(".card-group")
       .not("." + target)
       .addClass("fadeOut");
+
+    // Fade cards that aren't exclusive to this tier if
+    // we're set to "only" mode
+    if (pluginsAllOrOnly == "only"){
+      var selector = excluded.map(e => "." + e).join(", ")
+      $(".card-group").filter(selector).addClass("fadeOut");
+    }
+
     // For each faded card, move href to data-href and remove href
     $(".card-group.fadeOut").each(function () {
       var link = $(this).find("a");
@@ -296,43 +476,18 @@ $("a[data-filter]").on("click", function () {
       link.removeAttr("href");
     });
   }
-});
 
-// Plugin filter on keypress
-$("a[data-filter]").on("keypress", function(e) {
-  if (e.keyCode === 13) {
-    $("html, body").animate({ scrollTop: 0 });
-    var target = $(this).data("filter");
-
-    // Remove any active classes that may already be applied
-    $("a[data-filter]").removeClass("active");
-    // Add active class sidebar a
-    $(this).addClass("active");
-
-    // For all faded cards, replace href with data-href target
-    $(".card-group.fadeOut").each(function () {
-      var link = $(this).find("a");
-      link.attr("href", $(link).attr("data-href"));
-      link.removeAttr("data-href");
-    });
-
-    // Remove any fade states that may already be applied
-    $(".card-group").removeClass("fadeOut");
-
-    // If the target of the li is not all continue
-    if (target !== "all") {
-      // Fade all cards that don't have matching filter
-      $(".card-group")
-        .not("." + target)
-        .addClass("fadeOut");
-      // For each faded card, move href to data-href and remove href
-      $(".card-group.fadeOut").each(function () {
-        var link = $(this).find("a");
-        link.attr("data-href", $(link).attr("href"));
-        link.removeAttr("href");
-      });
+  // Make sure to show/hide categories as needed
+  $(".category").each(function(){
+    var cards = $(this).find(".card-group:visible");
+    var id = $(this).attr("id");
+    if (!cards.length){
+      $(this).hide();
+      $(".nav-link[href='#"+id+"']").hide()
     }
-}});
+  })
+};
+
 
   // Responsive Tables
   if ($window.width() <= 1099) {
@@ -343,19 +498,30 @@ $("a[data-filter]").on("keypress", function(e) {
     if ($window.width() <= 1099) {
       mobileTable();
     }
+
+    if ($window.width() > 1099) {
+      $("table").each(function (index, value) {
+        $(this).removeClass("mobile");
+      });
+    }
   }));
 
   function mobileTable() {
     $("table").each(function (index, value) {
+      $(this).addClass("mobile");
       var headerCount = $(this).find("thead th").length;
 
       for (i = 0; i <= headerCount; i++) {
-        var headerLabel = $(this)
-          .find("thead th:nth-child(" + i + ")")
-          .text();
+
+        var headerLabel = $(this).find("thead th:nth-child(" + i + ") .mobile-label").text();
+        if (!headerLabel){
+          headerLabel = $(this)
+            .find("thead th:nth-child(" + i + ")")
+            .text();
+        }
 
         $(this)
-          .find("tr td:not([colspan]):nth-child(" + i + ")")
+          .find("tr td:not([colspan],.no-mobile,.header-row):nth-child(" + i + ")")
           .replaceWith(function () {
             return $('<td data-label="' + headerLabel + '">').append(
               $(this).contents()
@@ -393,8 +559,42 @@ $("a[data-filter]").on("keypress", function(e) {
 
   // navtabs
   const navtabs = $("div[data-navtab-id]");
+
   navtabs.on("click", function () {
-    const navtabTitle = $(this);
+     activateNavTab($(this))
+  });
+
+  navtabs.on("keypress", function(e) {
+    if (e.keyCode === 13) {
+      activateNavTab($(this))
+    }
+  });
+
+  function activateNavTab(navtabTitle, skipScroll) {
+    // Toggle all nav tabs that match this title
+    const text = navtabTitle.text();
+    const search = $(".navtab-title").filter(function () {
+      return $(this).text().trim().toLowerCase() == text.trim().toLowerCase()
+    }).each(function(k,v){
+      activateSingleNavTab($(v));
+    });
+
+    const elementTop = navtabTitle.offset().top;
+    const elementBottom = elementTop + navtabTitle.outerHeight();
+    const screenTop = $(window).scrollTop();
+    const screenBottom = $(window).scrollTop() + $(window).innerHeight();
+
+    if (!skipScroll){
+      // If the element isn't on screen, scroll to it
+      if (elementBottom < screenTop || elementTop > screenBottom){
+          $([document.documentElement, document.body]).animate({
+            scrollTop: elementTop - 120
+        }, 0);
+      }
+    }
+  }
+
+  function activateSingleNavTab(navtabTitle){
     const navtabID = navtabTitle.data("navtab-id");
     const navtabContent = $(`div[data-navtab-content='${navtabID}']`);
 
@@ -407,17 +607,64 @@ $("a[data-filter]").on("keypress", function(e) {
     navtabTitle.addClass("active");
     navtabContent.siblings().css("display", "none");
     navtabContent.css("display", "block");
-  });
+  }
+
   // set first navtab as active
+  // This MUST happen before setting navtab via URL as there may be
+  // a mix of tabs on a page e.g. use-admin-api/use-deck and curl/httpie
   $(".navtabs").each(function (index, navtabs) {
     $(navtabs).find("div[data-navtab-content]").css("display", "none");
-
     const navtabsTabs = $(navtabs).find("div[data-navtab-id]");
     navtabsTabs.first().addClass("active");
     $(
       `div[data-navtab-content='${navtabsTabs.first().data("navtab-id")}']`
     ).css("display", "block");
   });
+
+
+  // Ability to set NavTab via URL
+  const getParams = new Proxy(new URLSearchParams(window.location.search), {
+    get: (searchParams, prop) => searchParams.get(prop),
+  });
+
+  if (getParams.tab) {
+    const matches = decodeURI(getParams.tab).toLowerCase().split(",");
+    for (const i in matches){
+      const navTab = $(".navtab-title[data-slug='"+matches[i]+"']").first();
+      if (navTab.length){
+        activateNavTab(navTab);
+      }
+    }
+  }
+
+  // Handle EE/OSS Sidebar switcher
+  const ossEeToggle = $("#oss-ee-toggle");
+  if ($(".external-trigger").length){
+    ossEeToggle.show();
+  }
+
+  ossEeToggle.on("click", function(){
+    const t = $(this);
+    const current = t.data('current');
+    let next;
+    let slug;
+    if (current == "Enterprise" || !current){
+      next = "OSS";
+      slug = "kong-gateway-oss";
+    } else {
+      next = "Enterprise";
+      slug = "kong-gateway";
+    }
+    t.data('current', next);
+    t.find("#switch-to-version").text(current);
+
+    activateNavTab($(".navtab-title[data-slug='"+slug+"']").first(), true)
+  });
+
+  if (getParams.install == "oss" && ossEeToggle.is(":visible")) {
+    ossEeToggle.click();
+  }
+
 
   /**
    * Expandable images
@@ -431,7 +678,6 @@ $("a[data-filter]").on("keypress", function(e) {
    * To disable for whole page you can add 'disable_image_expand: true' to page Front Matter block. Example:
    * ---
    * title: Install Kong Enterprise
-   * toc: false
    * disable_image_expand: true
    * ---
    */
@@ -508,105 +754,20 @@ $("a[data-filter]").on("keypress", function(e) {
     }
   });
 
-  /**
-   * Edition based element visibility
-   *
-   * Usage in markdown files:
-   * Wrap any of the [content] within {% edition [edition] %}[content]{% endedition %} to see the content
-   * only when edition=[edition] query parameter is specified.
-   *
-   * Example:
-   * {% edition gateway-oss %}
-   * ### {{site.ce_product_name}}
-   * {{site.ce_product_name}} is an open-source, lightweight API gateway optimized for microservices, delivering unparalleled...
-   * {% endedition %}
-   *
-   * Usage in docs_nav_.yml files:
-   * Use edition: [edition] property for specific item which should be visible
-   * only when edition=[edition] query parameter is specified.
-   *
-   * Example:
-   * - title: Getting Started Guide
-   *   icon: /assets/images/icons/documentation/icn-quickstart-color.svg
-   *   items:
-   *     - text: Overview
-   *       url: /overview
-   *     - text: Prepare to Administer
-   *       url: /prepare
-   *       edition: enterprise
-   *     - text: Expose your Services
-   *       url: /expose-services
-   *       edition: gateway-oss
-   */
-  const edition = decodeURIComponent(window.location.search)
-    .substring(1)
-    .split("&")
-    .map((queryParam) => queryParam.split("="))
-    .filter((params) => params[0] === "edition")
-    .map((params) => params[1])[0];
-
-  const editionSwitch = $(".edition-switch");
-  editionSwitch.on("click", function () {
-    if (edition === "gateway-oss") {
-      window.location.search = "?edition=enterprise";
-    } else {
-      window.location.search = "?edition=gateway-oss";
-    }
-  });
-
-  if (edition) {
-    $("*[data-edition]")
-      .not(`[data-edition="${edition}"]`)
-      .each(function (index, element) {
-        element.style.display = "none";
-      });
-    editionSwitch.addClass(edition);
-  }
 });
 
+// Tooltips for badges
 jQuery(function () {
-  var closed = localStorage.getItem("closebanner-hackathon");
-  if (
-    closed !== "closebanner"
-  ) {
-    $(".navbar-v2").removeClass("closed");
-    $("body").addClass("banner");
-  } else {
-    $(".navbar-v2").addClass("closed");
-    $("body").removeClass("banner");
-  }
-
-  // open docs sidebar items
-  $(".docs-sidebar a.active, li.accordion-item.active").each(function (
-    index,
-    a
-  ) {
-    $(a)
-      .parents("li.accordion-item")
-      .each(function (index, item) {
-        $(item).addClass("active");
-        $(item).find("> input").prop("checked", true);
-      });
-  });
-});
-
-var scrolling = false;
-$(document).on("scroll", function () {
-  scrolling = true;
-});
-
-setInterval(function () {
-  if (scrolling) {
-    scrolling = false;
-    if ($(document).scrollTop() < 85) {
-      $(".navbar-v2").removeClass("compress");
-    } else {
-      $(".navbar-v2").addClass("compress");
-    }
-  }
-}, 10);
-
-$(".closebanner").on("click", function () {
-  $(".navbar-v2").addClass("closed");
-  localStorage.setItem("closebanner-hackathon", "closebanner");
+    $('.badge.enterprise')
+      .append( '<div class="tooltip"><span class="tooltiptext">Available with Enterprise subscription - <a target="_blank" href="https://konghq.com/contact-sales">Contact Sales</a></span></div>' );
+    $('.badge.plus')
+      .append( '<div class="tooltip"><span class="tooltiptext">Available with Plus subscription (Konnect Cloud)</span></div>' );
+    $('.badge.free')
+      .append( '<div class="tooltip"><span class="tooltiptext">Available in Enterprise Free mode (without a license)</span></div>' );
+    $('.badge.oss')
+      .append( '<div class="tooltip"><span class="tooltiptext" >Available in Kong open-source only</span></div>' );
+    $('.badge.dbless')
+      .append( '<div class="tooltip"><span class="tooltiptext">Compatible with DB-less deployments</span></div>' );
+    $('.badge.konnect')
+      .append( '<div class="tooltip"><span class="tooltiptext">Available in the Konnect Cloud app</span></div>' );
 });

@@ -6,7 +6,7 @@
 #
 title: Configuration Property Reference for Kong Enterprise
 ---
-
+<!-- vale off -->
 ## Configuration loading
 
 Kong comes with a default configuration file that can be found at
@@ -864,6 +864,23 @@ its configuration changes from the database.
 Example: `admin_listen = 127.0.0.1:8444 http2 ssl`
 
 **Default:** `127.0.0.1:8001 reuseport backlog=16384, 127.0.0.1:8444 http2 ssl reuseport backlog=16384`
+
+---
+
+#### status_listen
+
+Comma-separated list of addresses and ports on which the Status API should
+listen.
+
+The Status API is a read-only endpoint allowing monitoring tools to retrieve
+metrics, healthiness, and other non-sensitive information of the current Kong
+node.
+
+This value can be set to `off`, disabling the Status API for this node.
+
+Example: `status_listen = 0.0.0.0:8100`
+
+**Default:** `off`
 
 ---
 
@@ -2221,7 +2238,6 @@ Examples:
 
 - `<IP>:<PORT>` -> `portal_gui_host = 127.0.0.1:8003`
 - `<HOSTNAME>` -> `portal_gui_host = portal_api.domain.tld`
-- `<HOSTNAME>/<PATH>` -> `portal_gui_host = dev-machine/dev-285`
 
 **Default:** `127.0.0.1:8003`
 
@@ -3014,7 +3030,7 @@ Different strategies are available to tune how to enforce splitting traffic of
 workspaces.
 
 - `smart` is the default option and uses the algorithm described in
-  https://docs.konghq.com/enterprise/0.33-x/workspaces/examples/#important-note-conflicting-apis-or-routes-in-workspaces
+   the [workspaces example](/gateway/latest/admin-api/workspaces/examples/#important-note-conflicting-services-or-routes-in-workspaces)
 - `off` disables any check
 - `path` enforces routes to comply with the pattern described in config
   enforce_route_path_pattern

@@ -5,7 +5,7 @@ subtitle: A modern control plane built on top of Envoy and focused on simplicity
 
 <div class="alert alert-ee blue">
    <b>Demo</b>: To see {{site.mesh_product_name}} in action, you can
-   <a href="https://konghq.com/request-demo-kong-mesh/">request a demo</a> and
+   <a href="https://konghq.com/request-demo-kong-mesh">request a demo</a> and
    we will get in touch with you.
 </div>
 
@@ -135,5 +135,5 @@ hybrid Kubernetes/VMs:
      organization.</i>
 </center>
 <br>
-[Learn more](https://kuma.io/docs/latest/documentation/deployments/) about the
+[Learn more](https://kuma.io/docs/latest/introduction/deployments/) about the
 standalone and multi-zone deployment modes in the Kuma documentation.

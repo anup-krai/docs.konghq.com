@@ -14,7 +14,7 @@ Kong supports both PostgreSQL 9.5+ and Cassandra 3.11.* as its datastore. This g
 steps to configure PostgreSQL. For assistance in setting up Cassandra, please contact your Kong Sales or Support representative.
 
 This software is governed by the
-[Kong Software License Agreement](https://konghq.com/kongsoftwarelicense/).
+[Kong Software License Agreement](https://konghq.com/kongsoftwarelicense).
 
 ### Deployment options
 
@@ -224,7 +224,7 @@ your setup, reach out to your Kong Support contact or go to the
 ## Next steps
 
 Check out {{site.base_gateway}}'s series of
-[Getting Started](/getting-started-guide/latest/overview) guides to get the most
+[Getting Started](/gateway/latest/get-started/comprehensive/) guides to get the most
 out of {{site.base_gateway}}.
 
 If you have an Enterprise subscription, add the license using the

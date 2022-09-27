@@ -1,6 +1,5 @@
 ---
 title: Vitals with InfluxDB
-redirect_from: "/enterprise/2.1.x/admin-api/vitals/vitals-influx-strategy"
 ---
 
 ## Overview
@@ -12,7 +11,7 @@ clusters (such as environments handling tens or hundreds of thousands of
 requests per second), without placing addition write load on the database
 backing the Kong cluster.
 
-For using Vitals with a database as the backend (i.e. PostgreSQL, Cassandra), 
+For using Vitals with a database as the backend (i.e. PostgreSQL, Cassandra),
 please refer to [Kong Vitals](/enterprise/{{page.kong_version}}/admin-api/vitals/).
 
 ## Getting Started
@@ -21,7 +20,7 @@ please refer to [Kong Vitals](/enterprise/{{page.kong_version}}/admin-api/vitals
 
 This guide assumes an existing InfluxDB server or cluster is already installed
 and is accepting write traffic. Production-ready InfluxDB installations should
-be deployed as a separate effort, but for proof-of-concept testing, running a 
+be deployed as a separate effort, but for proof-of-concept testing, running a
 local InfluxDB instance is possible via Docker:
 
 ```bash
@@ -31,7 +30,7 @@ $ docker run -p 8086:8086 \
       influxdb
 ```
 
-Writing Vitals data to InfluxDB requires that the `kong` database is created, 
+Writing Vitals data to InfluxDB requires that the `kong` database is created,
 this is done using the `INFLUXDB_DB` variable.
 
 ### Configuring Kong
@@ -43,6 +42,11 @@ backing strategy for Vitals. The InfluxDB host and port must also be defined:
 vitals_strategy = influxdb
 vitals_tsdb_address = 127.0.0.1:8086 # the IP or hostname, and port, of InfluxDB
 ```
+
+{:.note}
+> **Note**: In Hybrid Mode, configure [`vitals_strategy`](/enterprise/{{page.kong_version}}/property-reference/#vitals_strategy) 
+and [`vitals_tsdb_address`](/enterprise/{{page.kong_version}}/property-reference/#vitals_tsdb_address) 
+on both the control plane and all data planes.
 
 As with other Kong configurations, changes take effect on kong reload or kong
 restart.
@@ -124,6 +128,4 @@ syscall per request.
 Currently, Vitals InfluxDB data points are not downsampled or managed via
 retention policy by Kong. InfluxDB operators are encouraged to manually manage
 the retention policy of the `kong` database to reduce the disk space and memory
-needed to manage Vitals data points. Currently, Kong Vitals ignores data points
-older than 25 hours; it is safe to create a retention policy with a 25-hour
-duration for measurements written by Kong.
+needed to manage Vitals data points. 

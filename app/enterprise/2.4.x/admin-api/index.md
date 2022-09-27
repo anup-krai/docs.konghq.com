@@ -17,6 +17,10 @@ service_body: |
     `tags`<br>*optional* |  An optional set of strings associated with the Service, for grouping and filtering.
     `client_certificate`<br>*optional* |  Certificate to be used as client certificate while TLS handshaking to the upstream server.  With form-encoded, the notation is `client_certificate.id=<client_certificate_id>`. With JSON, use `"client_certificate":{"id":"<client_certificate_id>"}`.
     `url`<br>*shorthand-attribute* |  Shorthand attribute to set `protocol`, `host`, `port` and `path` at once. This attribute is write-only (the Admin API never "returns" the url).
+    `tls_verify`<br>*optional* |  Whether to enable verification of upstream server TLS certificate. If set to `null`, then the Nginx default is respected.
+    `tls_verify_depth`<br>*optional* |  Maximum depth of chain while verifying Upstream server's TLS certificate. If set to `null`, then the Nginx default is respected.  Default: `null`.
+    `ca_certificates`<br>*optional* |  Array of `CA Certificate` object UUIDs that are used to build the trust store while verifying upstream server's TLS certificate. If set to `null` when Nginx default is respected. If default CA list in Nginx are not specified and TLS verification is enabled, then handshake with upstream server will always fail (because no CA are trusted).  With form-encoded, the notation is `ca_certificates[]=4e3ad2e4-0bc4-4638-8e34-c84a417ba39b&ca_certificates[]=51e77dc2-8f3e-4afa-9d0e-0e3bbbcfd515`. With JSON, use an Array.
+    `url`<br>*shorthand-attribute* |  Shorthand attribute to set `protocol`, `host`, `port` and `path` at once. This attribute is write-only (the Admin API never returns the URL).
 
 service_json: |
     {
@@ -33,7 +37,10 @@ service_json: |
         "write_timeout": 60000,
         "read_timeout": 60000,
         "tags": ["user-level", "low-priority"],
-        "client_certificate": {"id":"4e3ad2e4-0bc4-4638-8e34-c84a417ba39b"}
+        "client_certificate": {"id":"4e3ad2e4-0bc4-4638-8e34-c84a417ba39b"},
+        "tls_verify": true,
+        "tls_verify_depth": null,
+        "ca_certificates": ["4e3ad2e4-0bc4-4638-8e34-c84a417ba39b", "51e77dc2-8f3e-4afa-9d0e-0e3bbbcfd515"]
     }
 
 service_data: |
@@ -51,7 +58,10 @@ service_data: |
         "write_timeout": 60000,
         "read_timeout": 60000,
         "tags": ["user-level", "low-priority"],
-        "client_certificate": {"id":"51e77dc2-8f3e-4afa-9d0e-0e3bbbcfd515"}
+        "client_certificate": {"id":"51e77dc2-8f3e-4afa-9d0e-0e3bbbcfd515"},
+        "tls_verify": true,
+        "tls_verify_depth": null,
+        "ca_certificates": ["4e3ad2e4-0bc4-4638-8e34-c84a417ba39b", "51e77dc2-8f3e-4afa-9d0e-0e3bbbcfd515"]
     }, {
         "id": "fc73f2af-890d-4f9b-8363-af8945001f7f",
         "created_at": 1422386534,
@@ -66,7 +76,10 @@ service_data: |
         "write_timeout": 60000,
         "read_timeout": 60000,
         "tags": ["admin", "high-priority", "critical"],
-        "client_certificate": {"id":"4506673d-c825-444c-a25b-602e3c2ec16e"}
+        "client_certificate": {"id":"4506673d-c825-444c-a25b-602e3c2ec16e"},
+        "tls_verify": true,
+        "tls_verify_depth": null,
+        "ca_certificates": ["4e3ad2e4-0bc4-4638-8e34-c84a417ba39b", "51e77dc2-8f3e-4afa-9d0e-0e3bbbcfd515"]
     }],
 
 route_body: |
@@ -89,7 +102,7 @@ route_body: |
     `sources`<br>*semi-optional* |  A list of IP sources of incoming connections that match this Route when using stream routing. Each entry is an object with fields "ip" (optionally in CIDR range notation) and/or "port".
     `destinations`<br>*semi-optional* |  A list of IP destinations of incoming connections that match this Route when using stream routing. Each entry is an object with fields "ip" (optionally in CIDR range notation) and/or "port".
     `tags`<br>*optional* |  An optional set of strings associated with the Route, for grouping and filtering.
-    `service`<br>*optional* |  The Service this Route is associated to. This is where the Route proxies traffic to.  With form-encoded, the notation is `service.id=<service_id>`. With JSON, use `"service":{"id":"<service_id>"}`.
+    `service`<br>*optional* |  The Service this Route is associated to. This is where the Route proxies traffic to. With form-encoded, the notation is `service.id=<service id>` or `service.name=<service name>`. With JSON, use "`"service":{"id":"<service id>"}` or `"service":{"name":"<service name>"}`.
 
 route_json: |
     {
@@ -192,7 +205,6 @@ plugin_body: |
     `service`<br>*optional* |  If set, the plugin will only activate when receiving requests via one of the routes belonging to the specified Service. Leave unset for the plugin to activate regardless of the Service being matched.  Defaults to `null`. With form-encoded, the notation is `service.id=<service_id>`. With JSON, use `"service":{"id":"<service_id>"}`.
     `consumer`<br>*optional* |  If set, the plugin will activate only for requests where the specified has been authenticated. (Note that some plugins can not be restricted to consumers this way.). Leave unset for the plugin to activate regardless of the authenticated consumer.  Defaults to `null`. With form-encoded, the notation is `consumer.id=<consumer_id>`. With JSON, use `"consumer":{"id":"<consumer_id>"}`.
     `config`<br>*optional* |  The configuration properties for the Plugin which can be found on the plugins documentation page in the [Kong Hub](https://docs.konghq.com/hub/).
-    `run_on` |  Control on which Kong nodes this plugin will run, given a Service Mesh scenario. Accepted values are: * `first`, meaning "run on the first Kong node that is encountered by the request". On an API Getaway scenario, this is the usual operation, since there is only one Kong node in between source and destination. In a sidecar-to-sidecar Service Mesh scenario, this means running the plugin only on the Kong sidecar of the outbound connection. * `second`, meaning "run on the second node that is encountered by the request". This option is only relevant for sidecar-to-sidecar Service Mesh scenarios: this means running the plugin only on the Kong sidecar of the inbound connection. * `all` means "run on all nodes", meaning both sidecars in a sidecar-to-sidecar scenario. This is useful for tracing/logging plugins.  Defaults to `"first"`.
     `protocols` |  A list of the request protocols that will trigger this plugin. Possible values are `"http"`, `"https"`, `"tcp"`, and `"tls"`. The default value, as well as the possible values allowed on this field, may change depending on the plugin type. For example, plugins that only work in stream mode will may only support `"tcp"` and `"tls"`.  Defaults to `["grpc", "grpcs", "http", "https"]`.
     `enabled`<br>*optional* | Whether the plugin is applied. Defaults to `true`.
     `tags`<br>*optional* |  An optional set of strings associated with the Plugin, for grouping and filtering.
@@ -206,7 +218,6 @@ plugin_json: |
         "service": null,
         "consumer": null,
         "config": {"hour":500, "minute":20},
-        "run_on": "first",
         "protocols": ["http", "https"],
         "enabled": true,
         "tags": ["user-level", "low-priority"]
@@ -221,7 +232,6 @@ plugin_data: |
         "service": null,
         "consumer": null,
         "config": {"hour":500, "minute":20},
-        "run_on": "first",
         "protocols": ["http", "https"],
         "enabled": true,
         "tags": ["user-level", "low-priority"]
@@ -233,7 +243,6 @@ plugin_data: |
         "service": null,
         "consumer": null,
         "config": {"hour":500, "minute":20},
-        "run_on": "first",
         "protocols": ["tcp", "tls"],
         "enabled": true,
         "tags": ["admin", "high-priority", "critical"]
@@ -637,8 +646,9 @@ HTTP 200 OK
 
 ``` json
 {
-    { "services": [],
-      "routes": []
+    {
+        "services": [],
+        "routes": []
     }
 }
 ```
@@ -1382,16 +1392,6 @@ See POST and PATCH responses.
 Attributes | Description
 ---:| ---
 `name or id`<br>**required** | The unique identifier **or** the name of the Service to delete.
-
-
-##### Delete Service Associated to a Specific Route
-
-<div class="endpoint delete">/routes/{route name or id}/service</div>
-
-Attributes | Description
----:| ---
-`route name or id`<br>**required** | The unique identifier **or** the name of the Route associated to the Service to be deleted.
-
 
 *Response*
 
@@ -2856,23 +2856,11 @@ HTTP 200 OK
 
 ### Retrieve Upstream
 
-##### Retrieve Upstream
-
 <div class="endpoint get">/upstreams/{name or id}</div>
 
 Attributes | Description
 ---:| ---
 `name or id`<br>**required** | The unique identifier **or** the name of the Upstream to retrieve.
-
-
-##### Retrieve Upstream Associated to a Specific Target
-
-<div class="endpoint get">/targets/{target host:port or id}/upstream</div>
-
-Attributes | Description
----:| ---
-`target host:port or id`<br>**required** | The unique identifier **or** the host:port of the Target associated to the Upstream to be retrieved.
-
 
 *Response*
 
@@ -2884,28 +2872,16 @@ HTTP 200 OK
 {{ page.upstream_json }}
 ```
 
-
 ---
 
 ### Update Upstream
 
-##### Update Upstream
 
 <div class="endpoint patch">/upstreams/{name or id}</div>
 
 Attributes | Description
 ---:| ---
 `name or id`<br>**required** | The unique identifier **or** the name of the Upstream to update.
-
-
-##### Update Upstream Associated to a Specific Target
-
-<div class="endpoint patch">/targets/{target host:port or id}/upstream</div>
-
-Attributes | Description
----:| ---
-`target host:port or id`<br>**required** | The unique identifier **or** the host:port of the Target associated to the Upstream to be updated.
-
 
 *Request Body*
 
@@ -2922,12 +2898,9 @@ HTTP 200 OK
 {{ page.upstream_json }}
 ```
 
-
 ---
 
 ### Update or Create Upstream
-
-##### Create or Update Upstream
 
 <div class="endpoint put">/upstreams/{name or id}</div>
 
@@ -2935,17 +2908,7 @@ Attributes | Description
 ---:| ---
 `name or id`<br>**required** | The unique identifier **or** the name of the Upstream to create or update.
 
-
-##### Create or Update Upstream Associated to a Specific Target
-
-<div class="endpoint put">/targets/{target host:port or id}/upstream</div>
-
-Attributes | Description
----:| ---
-`target host:port or id`<br>**required** | The unique identifier **or** the host:port of the Target associated to the Upstream to be created or updated.
-
-
-*Request Body*
+#### Request Body
 
 {{ page.upstream_body }}
 
@@ -2965,7 +2928,7 @@ Notice that specifying a `name` in the URL and a different one in the request
 body is not allowed.
 
 
-*Response*
+#### Response
 
 ```
 HTTP 201 Created or HTTP 200 OK
@@ -2973,12 +2936,9 @@ HTTP 201 Created or HTTP 200 OK
 
 See POST and PATCH responses.
 
-
 ---
 
 ### Delete Upstream
-
-##### Delete Upstream
 
 <div class="endpoint delete">/upstreams/{name or id}</div>
 
@@ -2986,22 +2946,11 @@ Attributes | Description
 ---:| ---
 `name or id`<br>**required** | The unique identifier **or** the name of the Upstream to delete.
 
-
-##### Delete Upstream Associated to a Specific Target
-
-<div class="endpoint delete">/targets/{target host:port or id}/upstream</div>
-
-Attributes | Description
----:| ---
-`target host:port or id`<br>**required** | The unique identifier **or** the host:port of the Target associated to the Upstream to be deleted.
-
-
 *Response*
 
 ```
 HTTP 204 No Content
 ```
-
 
 ---
 
@@ -3082,8 +3031,7 @@ A target is an ip address/hostname with a port that identifies an instance of a 
 service. Every upstream can have many targets, and the targets can be
 dynamically added. Changes are effectuated on the fly.
 
-Because the upstream maintains a history of target changes, the targets cannot
-be deleted or modified. To disable a target, post a new one with `weight=0`;
+To disable a target, post a new one with `weight=0`;
 alternatively, use the `DELETE` convenience method to accomplish the same.
 
 The current target object definition is the one with the latest `created_at`.
@@ -3097,13 +3045,13 @@ Targets can be both [tagged and filtered by tags](#tags).
 
 ### Add Target
 
-##### Create Target Associated to a Specific Upstream
+#### Create Target Associated to a Specific Upstream
 
-<div class="endpoint post">/upstreams/{upstream host:port or id}/targets</div>
+<div class="endpoint post">/upstreams/{upstream_id}/targets</div>
 
 Attributes | Description
 ---:| ---
-`upstream host:port or id`<br>**required** | The unique identifier or the `host:port` attribute of the Upstream that should be associated to the newly-created Target.
+`upstream_id`<br>**required** | The unique identifier of the Upstream that should be associated to the newly-created Target.
 
 
 *Request Body*
@@ -3126,13 +3074,13 @@ HTTP 201 Created
 
 ### List Targets
 
-##### List Targets Associated to a Specific Upstream
+#### List Targets Associated to a Specific Upstream
 
-<div class="endpoint get">/upstreams/{upstream host:port or id}/targets</div>
+<div class="endpoint get">/upstreams/{upstream_id}/targets</div>
 
 Attributes | Description
 ---:| ---
-`upstream host:port or id`<br>**required** | The unique identifier or the `host:port` attribute of the Upstream whose Targets are to be retrieved. When using this endpoint, only Targets associated to the specified Upstream will be listed.
+`upstream_id`<br>**required** | The unique identifier of the Upstream whose Targets are to be retrieved. When using this endpoint, only Targets associated to the specified Upstream will be listed.
 
 
 *Response*

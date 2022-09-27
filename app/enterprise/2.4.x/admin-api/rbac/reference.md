@@ -354,7 +354,7 @@ ___
 ## Delete a Role
 **Endpoint**
 
-<div class="endpoint delete">/rbac/role/{name_or_id}</div>
+<div class="endpoint delete">/rbac/roles/{name_or_id}</div>
 
 | Attribute             | Description                               |
 | ---------             | -----------                               |
@@ -392,12 +392,12 @@ ___
 exact matches, or contain wildcards, represented by `*`.
 
 - Exact matches; eg:
-  * /apis/
-  * /apis/foo
+  * /services/
+  * /services/foo
 
 - Wildcards; eg:
-  * /apis/*
-  * /apis/*/plugins
+  * /services/*
+  * /services/*/plugins
 
 Where `*` replaces exactly one segment between slashes (or the end of
 the path).

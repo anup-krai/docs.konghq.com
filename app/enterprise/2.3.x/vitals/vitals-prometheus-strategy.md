@@ -1,6 +1,5 @@
 ---
 title: Vitals with Prometheus
-redirect_from: "/enterprise/2.1.x/admin-api/vitals/vitals-prometheus-strategy"
 ---
 
 This document covers integrating Kong Vitals with a new or existing Prometheus
@@ -10,7 +9,7 @@ clusters (such as environments handling tens or hundreds of thousands of
 requests per second), without placing addition write load on the database
 backing the Kong cluster.
 
-For using Vitals with a database as the backend (i.e. PostgreSQL, Cassandra), 
+For using Vitals with a database as the backend (i.e. PostgreSQL, Cassandra),
 please refer to [Kong Vitals](/enterprise/{{page.kong_version}}/admin-api/vitals/).
 
 ## Lifecycle Overview
@@ -71,7 +70,7 @@ scrape_configs:
 Please update `statsd-node` with the actual hostname that runs StatsD exporter.
 
 If you are using service discovery, it will be more convenient to configure
-multiple StatsD exporters in Prometheus. Please refer to the 
+multiple StatsD exporters in Prometheus. Please refer to the
 [scape_configs](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#%3Cscrape_config%3E)
 section of Prometheus document for further reading.
 
@@ -115,6 +114,11 @@ $ export KONG_VITALS_STATSD_ADDRESS=statsd-node:9125
 $ export KONG_VITALS_TSDB_ADDRESS=prometheus-node:9090
 ```
 
+{:.note}
+> **Note**: In Hybrid Mode, configure [`vitals_strategy`](/enterprise/{{page.kong_version}}/property-reference/#vitals_strategy) 
+and [`vitals_tsdb_address`](/enterprise/{{page.kong_version}}/property-reference/#vitals_tsdb_address) 
+on both the control plane and all data planes.
+
 Please update `statsd-node` and `prometheus-node` with the actual hostname that
 runs StatsD exporter and Prometheus.
 
@@ -136,7 +140,7 @@ $ export KONG_VITALS_PROMETHEUS_SCRAPE_INTERVAL=new_value_in_seconds
 
 The above option configures `interval` parameter when querying Prometheus.
 The value `new_value_in_seconds` should be equal or larger than
-`scrape_interval` config in Prometheus. 
+`scrape_interval` config in Prometheus.
 
 You can also configure Kong to send StatsD events with a different prefix from
 the default value of `kong`. Make sure the prefix in statsd.rules
@@ -216,7 +220,7 @@ socket.
 ```bash
 $ ./statsd_exporter --statsd.mapping-config=statsd.rules.yaml \
                     --statsd.read-buffer=30000000 \
-                    --statsd.listen-unixgram='/tmp/statsd.sock' 
+                    --statsd.listen-unixgram='/tmp/statsd.sock'
 ```
 
 By default the socket is created with permission `0755`, so that StatsD exporter
@@ -228,7 +232,7 @@ By default the socket is created with permission `0755`, so that StatsD exporter
 $ ./statsd_exporter --statsd.mapping-config=statsd.rules.yaml \
                     --statsd.read-buffer=30000000 \
                     --statsd.listen-unixgram='/tmp/statsd.sock' \
-                    --statsd.unixsocket-umask="777" 
+                    --statsd.unixsocket-umask="777"
 ```
 
 ## Exported Metrics

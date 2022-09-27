@@ -4,7 +4,7 @@ title: Kong Gateway (Enterprise) 2.3.x Release Notes
 These release notes provide a high-level overview of Kong Gateway (Enterprise) 2.3.x,
 which includes the 2.3.2.0 release. For detailed information about 2.3.x,
 and any subsequent 2.3.x patch releases, see the
-[Changelog](/enterprise/changelog/).
+[Changelog](/gateway/changelog/).
 
 ## New Features
 
@@ -26,9 +26,9 @@ required for Enterprise features, such as the
 [Dev Portal](/enterprise/{{page.kong_version}}/developer-portal), and others.
 
 Learn more:
-* [Kong subscriptions](https://konghq.com/subscriptions/)
+* [Kong subscriptions](https://konghq.com/subscriptions)
 * [Learn about free and enterprise modes](/enterprise/{{page.kong_version}}/deployment/licensing/)
-* [Install Kong Gateway](https://konghq.com/install/)
+* [Install Kong Gateway](https://konghq.com/install)
 
 ### Name changes
 
@@ -103,4 +103,4 @@ replaced with tighter Insomnia integration in [Insomnia 2021.1.0](https://insomn
 
 ## Changelog
 For a complete list of features, fixes, known issues and workarounds, and other
-changes, see the Kong Gateway (Enterprise) [Changelog](/enterprise/changelog/).
+changes, see the Kong Gateway (Enterprise) [Changelog](/gateway/changelog/).

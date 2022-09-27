@@ -1,5 +1,8 @@
 .DS_Store
 
+# ignore binstubs
+bin
+
 # ignore local install file
 install
 # don't ignore the install folder
@@ -16,6 +19,9 @@ install
 *.log
 .vscode/
 yarn.lock
+
+# test directory
+.netlify/
 
 # jekyll
 dist

@@ -3,10 +3,10 @@
   plugins:
     - name: Application Registration
       free: No
-      plus: Yes
+      plus: No
       enterprise: Yes
-      network_config_opts: All
-      notes: Cannot be applied directly as a plugin with Konnect Cloud.
+      network_config_opts: Self-managed classic, DB-less, and hybrid
+      notes: Application registration <b>is</b> available in Konnect Cloud, but doesn't require this plugin. <br>Learn how to <a href="/konnect/dev-portal/applications/enable-app-reg/">Enable Application Registration</a> in Konnect Cloud.
       url: /hub/kong-inc/application-registration
 
     - name: Basic Auth
@@ -53,7 +53,7 @@
       free: No
       plus: No
       enterprise: Yes
-      network_config_opts: All
+      network_config_opts: Self-managed classic, DB-less, and hybrid
       notes: |
         The time-to-live (ttl) does not work in hybrid mode. This setting
         determines the length of time a credential remains valid.
@@ -85,7 +85,7 @@
 
     - name: OAuth 2
       free: Yes
-      plus: Yes
+      plus: No
       enterprise: Yes
       network_config_opts: Self-managed classic only
       notes: |
@@ -169,6 +169,22 @@
       notes: --
       url: /hub/kong-inc/opa
 
+    - name: TLS Handshake Modifier
+      free: No
+      plus: No
+      enterprise: Yes
+      network_config_opts: Self-managed classic, DB-less, and hybrid
+      notes: --
+      url: /hub/kong-inc/tls-handshake-modifier
+
+    - name: TLS Metadata Headers
+      free: No
+      plus: No
+      enterprise: Yes
+      network_config_opts: Self-managed classic, DB-less, and hybrid
+      notes: --
+      url: /hub/kong-inc/tls-metadata-headers
+
 - category:
   name: Traffic Control
   plugins:
@@ -206,9 +222,9 @@
 
     - name: GraphQL Rate Limiting Advanced
       free: No
-      plus: Yes
+      plus: No
       enterprise: Yes
-      network_config_opts: All
+      network_config_opts: Self-managed classic, DB-less, and hybrid
       notes: |
         In DB-less and hybrid modes, the <code>cluster</code> config strategy
         is not supported. Use <code>redis</code> instead.
@@ -300,6 +316,30 @@
       notes: --
       url: /hub/kong-inc/route-by-header
 
+    - name: Upstream Timeout
+      free: No
+      plus: No
+      Enterprise: Yes
+      network_config_opts: All
+      notes: --
+      url: /hub/kong-inc/upstream-timeout
+
+    - name: WebSocket Size Limit
+      free: No
+      plus: Yes
+      enterprise: Yes
+      network_config_opts: All
+      notes: --
+      url: /hub/kong-inc/websocket-size-limit
+
+    - name: WebSocket Validator
+      free: No
+      plus: Yes
+      enterprise: Yes
+      network_config_opts: All
+      notes: --
+      url: /hub/kong-inc/websocket-validator
+
     - name: Mocking
       free: No
       plus: Yes
@@ -349,17 +389,6 @@
 - category:
   name: Analytics and Monitoring
   plugins:
-    - name: Collector
-      free: No
-      plus: No
-      enterprise: Yes
-      network_config_opts: Self-managed classic, DB-less, and hybrid
-      notes: |
-        Not bundled with Kong Gateway.
-        <br><br>
-        Kong Immunity is not available in Konnect Cloud.
-      url: /enterprise/latest/immunity/install-configure
-
     - name: Datadog
       free: Yes
       plus: Yes
@@ -367,6 +396,14 @@
       network_config_opts: All
       notes: --
       url: /hub/kong-inc/datadog
+
+    - name: OpenTelemetry
+      free: Yes
+      plus: Yes
+      enterprise: Yes
+      network_config_opts: All
+      notes: --
+      url: /hub/kong-inc/opentelemetry
 
     - name: Prometheus
       free: Yes
@@ -397,9 +434,9 @@
 
     - name: DeGraphQL
       free: No
-      plus: Yes
+      plus: No
       enterprise: Yes
-      network_config_opts: All
+      network_config_opts: Self-managed classic, DB-less, and hybrid
       notes: --
       url: /hub/kong-inc/degraphql
 
@@ -426,6 +463,14 @@
       network_config_opts: All
       notes: --
       url: /hub/kong-inc/grpc-web
+
+    - name: jq
+      free: No
+      plus: No
+      enterprise: Yes
+      network_config_opts: All
+      notes: --
+      url: /hub/kong-inc/jq
 
     - name: Kafka Upstream
       free: No

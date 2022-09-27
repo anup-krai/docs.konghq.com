@@ -3,19 +3,19 @@
   icon: /assets/images/icons/documentation/icn-quickstart-color.svg
   items:
     - text: Overview
-      url: /../../getting-started-guide/latest/overview
+      url: /../../getting-started-guide/2.2.x/overview
     - text: Prepare to Administer
-      url: /../../getting-started-guide/latest/prepare
+      url: /../../getting-started-guide/2.2.x/prepare
     - text: Expose your Services
-      url: /../../getting-started-guide/latest/expose-services
+      url: /../../getting-started-guide/2.2.x/expose-services
     - text: Protect your Services
-      url: /../../getting-started-guide/latest/protect-services
+      url: /../../getting-started-guide/2.2.x/protect-services
     - text: Improve Performance
-      url: /../../getting-started-guide/latest/improve-performance
+      url: /../../getting-started-guide/2.2.x/improve-performance
     - text: Secure Services
-      url: /../../getting-started-guide/latest/secure-services
+      url: /../../getting-started-guide/2.2.x/secure-services
     - text: Set Up Intelligent Load Balancing
-      url: /../../getting-started-guide/latest/load-balancing
+      url: /../../getting-started-guide/2.2.x/load-balancing
 
 - title: Guides &amp; References
   icon: /assets/images/icons/documentation/icn-references-color.svg

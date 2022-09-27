@@ -33,10 +33,6 @@ Kong Admin API provides a RESTful interface for administration and configuration
 
 Kong Developer Portal (Kong Dev Portal) is used to onboard new developers and to generate API documentation, create custom pages, manage API versions, and secure developer access. For more information, see [_Kong Developer Portal_](/enterprise/{{page.kong_version}}/developer-portal/).
 
-### Kong Immunity
-
-Kong Immunity uses machine learning to autonomously identify service behavior anomalies in real-time to improve security, mitigate breaches and isolate issues. Use Kong Immunity to autonomously identify service issues with machine learning-powered anomaly detection. For more information, see [_Kong Immunity_](/enterprise/{{page.kong_version}}/immunity/install-configure/).
-
 ### Kubernetes Ingress Controller
 
 Kong for Kubernetes Enterprise (K4K8S) is a Kubernetes Ingress Controller. A Kubernetes Ingress Controller is a proxy that exposes Kubernetes services from applications (for example, Deployments, ReplicaSets) running on a Kubernetes cluster to client applications running outside of the cluster. The intent of an Ingress Controller is to provide a single point of control for all incoming traffic into the Kubernetes cluster. For more information, see [_Kong for Kubernetes_](/enterprise/{{page.kong_version}}/deployment/kong-for-kubernetes-enterprise).
@@ -64,8 +60,7 @@ Kong Studio enables spec-first development for all REST and GraphQL services. Wi
 There are a few ways to test out the gateway's Plus or Enterprise features:
 
 * Sign up for a [free trial of {{site.konnect_product_name}} Plus](https://konnect.konghq.com/register).
-* Try out {{site.base_gateway}} on Kubernetes using a live tutorial at
-[https://www.konglabs.io/kubernetes/](https://www.konglabs.io/kubernetes/).
+* Check out learning labs at [Kong Academy]({{site.links.learn}}).
 * If you are interested in evaluating Enterprise features locally, the
 Kong sales team manages evaluation licenses as part of a formal sales process.
 The best way to get started with the sales process is to

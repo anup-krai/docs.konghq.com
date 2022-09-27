@@ -8,7 +8,8 @@ module.exports = async function (path) {
     gsg: 'getting-started-guide',
     kic: 'kubernetes-ingress-controller',
     konnect: 'konnect',
-    mesh: 'mesh'
+    mesh: 'mesh',
+    gateway: 'gateway'
   }
   let files = await fg(`../app/_data/docs_nav_${path}.yml`)
   files = files
@@ -19,15 +20,10 @@ module.exports = async function (path) {
       const item = { path: f }
       const info = f.replace('../app/_data/docs_nav_', '').replace(/\.yml$/, '')
 
-      // Special case Konnect Platform
-      if (info === 'konnect_platform') {
-        item.type = 'konnect-platform'
-        item.version = ''
-      } else {
         const x = info.split('_')
         item.type = lookup[x[0]]
         item.version = x[1]
-      }
+
       return item
     })
     .filter((n) => n)

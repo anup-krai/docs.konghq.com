@@ -1,8 +1,8 @@
-[![Netlify Status](https://api.netlify.com/api/v1/badges/ae60f2a4-488e-4771-b24a-c26badc5f45d/deploy-status)](https://app.netlify.com/sites/kongdocs/deploys)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/a4e2b987-f4f2-4512-a8fa-fd954a0126f8/deploy-status)](https://app.netlify.com/sites/kongdocs/deploys)
 [![](https://img.shields.io/github/license/kong/docs.konghq.com)](https://github.com/Kong/docs.konghq.com/blob/main/LICENSE)
 [![](https://img.shields.io/github/contributors/kong/docs.konghq.com)]()
 
-# KONG's Documentation Website
+# Kong's Documentation Website
 
 This repository contains the source content and code for [Kong](https://github.com/Kong/kong)'s documentation website. It's built using [Jekyll](https://jekyllrb.com/) and deployed with [Netlify](https://www.netlify.com/).
 
@@ -13,72 +13,32 @@ Here are some things to know before you get started:
 * **We need more help in some areas**. We'd especially love some help with [plugin](https://github.com/Kong/docs.konghq.com/tree/main/app/_hub) documentation.
 
 * **Some of our docs are generated**.
-    * [Admin API](https://docs.konghq.com/gateway-oss/)
-    * [Configuration reference](https://docs.konghq.com/gateway-oss/latest/configuration/)
-    * [CLI reference](https://docs.konghq.com/gateway-oss/latest/cli/)
-    * [Upgrade guide](https://docs.konghq.com/gateway-oss/latest/upgrading/)
+    * [Admin API](https://docs.konghq.com/gateway/latest/admin-api/)
+    * [CLI reference](https://docs.konghq.com/gateway/latest/reference/cli/)
+    * [OSS upgrade guide](https://docs.konghq.com/gateway/latest/install-and-run/upgrading-oss/)
+    * [PDK reference](https://docs.konghq.com/gateway/latest/pdk)
 
-All pull requests for these docs should be opened on the [Kong/kong](https://github.com/Kong/kong) repository. Fork the repository and submit PRs from your fork.
+All pull requests for these docs should be opened in the [Kong/kong](https://github.com/Kong/kong) repository. Fork the repository and submit PRs from your fork.
 
-For [Gateway Enterprise configuration reference](https://docs.konghq.com/enterprise/latest/property-reference/) and [PDK reference](https://docs.konghq.com/gateway-oss/latest/pdk/) documentation, open an issue on this repo and we'll update the docs.
+For [Gateway Enterprise configuration reference](https://docs.konghq.com/gateway/latest/reference/configuration), open an issue on this repo and we'll update the docs.
 
 * **Community is a priority for us**. Before submitting an issue or pull request, make sure to review our [Contributing Guide](https://docs.konghq.com/contributing/).
 
 * We are currently accepting plugin submissions to our plugin hub from trusted technical partners, on a limited basis. For more information, see the [Kong Partners page](https://konghq.com/partners/).
 
-## Run local project
-***
+## Run Locally
 
-For anything other than minor changes, clone the repository onto your local machine and build locally.
+For anything other than minor changes, [clone the repository onto your local machine and build locally](docs/platform-install.md). Once you've installed all of the tools required, you can use our `Makefile` to build the docs:
 
-## Run locally with gulp
-***
-
-### Prerequisites
-
-- [gulp](https://gulpjs.com/docs/en/getting-started/quick-start/) installed globally
-
-Install dependencies:
-```
+```bash
+# Install dependencies
 make install
-```
 
-Run the project:
-```
+# Build the site and watch for changes 
 make run
 ```
 
-If you have issues, run:
-```
-make clean
-```
-
-## Run locally with npm
-***
-
-### Prerequisites
-
-- [node and npm](https://www.npmjs.com/get-npm)
-- [yarn](https://classic.yarnpkg.com)
-- [gulp](https://gulpjs.com/docs/en/getting-started/quick-start/)
-- [Bundler](https://bundler.io/) (< 2.0.0)
-- [Ruby](https://www.ruby-lang.org) (> 2.6)
-- [Python](https://www.python.org) (>= 2.7.X, < 3)
-
-
-Install dependencies:
-```
-gem install bundler
-npm install
-```
-
-Run the project:
-```
-npm start
-```
-
 ## Plugin contributors
-***
 
 If you have contributed a plugin, you can add a Kong badge to your plugin README.
 
@@ -93,7 +53,6 @@ Here's how the badge looks: [![](https://img.shields.io/badge/Kong-test-blue.svg
 See [Issue #908](https://github.com/Kong/docs.konghq.com/issues/908) for more information. Note that we're not currently hosting assets for badges.
 
 ## Generate the PDK, Admin API, CLI, and Configuration documentation
-***
 
 > This section is for Kong source code maintainers. You don't need to do anything here if you're contributing to this repo!
 
@@ -101,13 +60,13 @@ The PDK docs, Admin API docs, `cli.md` and `configuration.md` for each release a
 
 To generate them, go to the `Kong/kong` repo and run:
 
-```
+```bash
 scripts/autodoc <docs-folder> <kong-version>
 ```
 
 For example:
 
-```
+```bash
 cd /path/to/kong
 scripts/autodoc ../docs.konghq.com 2.4.x
 ```
@@ -120,9 +79,9 @@ After everything is generated, review, open a branch with the changes, send a
 pull request, and review the changes.
 
 You usually want to open a PR against a `release/*` branch. For example, in the
-example above the branch was `release/2.4`.
+example above, the branch was `release/2.4`.
 
-```
+```bash
 cd docs.konghq.com
 git fetch --all
 git checkout release/2.4
@@ -136,28 +95,28 @@ Then open a pull request against `release/2.4`.
 
 ## Testing
 
-Tests for this site are written using `rspec` and `capybara` with the `apparition` driver.
+Tests for this site are written using `fetch`, `cheerio` and `jest`
 
-> You'll need Google Chrome installed to run these tests.
+To run the tests, you must first build the site by running `make build` before running `make smoke`.
 
-To run the tests, you must first build the site by running `make build` before running `make rspec`.
+Many of the tests are smoke tests to check for issues that occurred while adding caching to the site, such as ensuring that the side navigation isn't cached.
 
-Many of the tests are smoke tests to check issues that occurred whilst adding caching to the site, such as ensuring that the side navigation isn't cached.
+To add your own tests, look in the `tests` directory and use `home.test.js` as a sample. You specify which URL to visit and then a CSS selector to search for, before asserting that the contents match what you expect.
 
-To add your own tests, look in the `spec` directory and use `home_spec.rb` as a sample. You specify which URL to visit and then a CSS selector to search for, before asserting that the contents match what you expect.
-
-```ruby
-it "has the 'Welcome to Kong' header" do
-  visit "/"
-  expect(find(".landing-page h1").text).to eq("Welcome to Kong Docs")
-end
+```javascript
+test("has the 'Welcome to Kong' header", async () => {
+  const $ = await fetchPage("/")
+  expect($("#main")).toHaveText("Welcome to Kong Docs");
+});
 ```
-
-This test framework can also be used to test behavior added with JavaScript, but we do not have any examples at this time.
 
 ## Continuous Integration
 
 We run various quality checks at build time to ensure that the documentation is maintainable.
+
+Some of the checks can be manually marked as approved using labels:
+
+* `ci:manual-approve:link-validation` - mark link checking as successful. Useful when Netlify returns an `HTTP 400` error and the links are validated manually.
 
 ### include-check
 
@@ -169,7 +128,7 @@ successful.
 
 In the following example, we can see that `deployment-options-k8s.md` uses a `page.*` variable, and that the include is used in the `kong-for-kubernetes.md` file:
 
-```
+```bash
 ❯ ./include-check.sh
 Page variables must not be used in includes.
 Pass them in via include_cached instead
@@ -184,32 +143,41 @@ Here are sample contents for those files:
 
 In `kong-for-kubernetes.md`:
 
-```
-{% include_cached app/_includes/md/2.5.x/deployment-options-k8s.md }
+```md
+{% include_cached app/_includes/md/2.5.x/deployment-options-k8s.md %}
 ```
 
 In `deployment-options-k8s`:
 
-```
+```md
 This is an include that uses {{ page.url }}
 ```
 
 To resolve this, the two files should be updated to pass in the URL when `include_cached` is called:
 
-
 In `kong-for-kubernetes.md`:
 
-```
-{% include_cached app/_includes/md/2.5.x/deployment-options-k8s.md url=page.url }
+```md
+{% include_cached app/_includes/md/2.5.x/deployment-options-k8s.md url=page.url %}
 ```
 
 In `deployment-options-k8s`:
 
-```
+```md
 This is an include that uses {{ include.url }}
 ```
 
 The `include_cached` gem uses all passed parameters as the cache lookup key, and this ensures that all required permutations of an include file will be generated.
 
 For guidelines on how to write includes and call them in target topics, see the
-[Kong Docs contributing guidelines](https://docs.konghq.com/contributing/includes). 
+[Kong Docs contributing guidelines](https://docs.konghq.com/contributing/includes).
+
+### Review Labels
+
+When raising a pull request, it's useful to indicate what type of review you're looking for from the team. To help with this, we've added three labels that can be applied:
+
+- `review:copyedit`: Request for writer review.
+- `review:general`: Review for general accuracy and presentation. Does the doc work? Does it output correctly?
+- `review:tech`: Request for technical review from an SME.
+
+At least one of these labels must be applied to a PR or the build will fail.

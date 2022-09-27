@@ -1,8 +1,5 @@
 ---
 title: Vitals with InfluxDB
-redirect_from:
-  - /enterprise/2.2.x/admin-api/vitals/vitals-influx-strategy
-  - /enterprise/latest/admin-api/vitals/vitals-influx-strategy
 ---
 
 ## Improve Vitals performance with InfluxDB
@@ -104,6 +101,11 @@ backing strategy for Vitals. The InfluxDB host and port must also be defined:
 $ echo "KONG_VITALS_STRATEGY=influxdb KONG_VITALS_TSDB_ADDRESS=influxdb:8086 kong reload exit" \
 | docker exec -i kong-ee /bin/sh
 ```
+
+{:.note}
+> **Note**: In Hybrid Mode, configure [`vitals_strategy`](/enterprise/{{page.kong_version}}/property-reference/#vitals_strategy) 
+and [`vitals_tsdb_address`](/enterprise/{{page.kong_version}}/property-reference/#vitals_tsdb_address) 
+on both the control plane and all data planes.
 
 ## Understanding Vitals data using InfluxDB measurements
 
@@ -225,6 +227,4 @@ microsecond precision requires an additional syscall per request.
 Vitals InfluxDB data points are not downsampled or managed by a
 retention policy through Kong. InfluxDB operators are encouraged to manually manage
 the retention policy of the `kong` database to reduce the disk space and memory
-needed to manage Vitals data points. Kong Vitals ignores data points
-older than 25 hours, so it is safe to create a retention policy with a 25-hour
-duration for measurements written by Kong.
+needed to manage Vitals data points.

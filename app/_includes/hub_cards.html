@@ -3,7 +3,6 @@
 {% assign extn_slug = path_array[2] %}
 {% assign extn_publisher = path_array[1] %}
 {% capture extn_id %}{{ extn_publisher }}_{{ extn_slug }}{% endcapture %}
-{% if filename == "index.md" and extn.type %}
   {% if include.header_icon %}
     {% assign header_icon = include.header_icon %}
   {% else %}
@@ -17,9 +16,10 @@
           unless extn.cloud == false %}plus {% endunless %}{% endif %}{%
             if extn.enterprise %}enterprise {%
               else %}open-source {% endif %}{%
+                unless extn.cloud == false %} konnect-cloud{% endunless %}{%
                 else %}pub-not-konghq pub-{{extn_publisher}}{% endif %}">
     <div class="plugin-card">
-      <a href="{{ extn.url | remove: '/index' }}" title="{{ extn.name }}: {{ extn.desc }}">
+      <a href="{{ extn.url | remove: 'index.html' }}" title="{{ extn.name }}: {{ extn.desc }}">
         <div>
           <div class="name-desc">
             {% if extn.plus and extn_publisher == 'kong-inc' %}
@@ -42,4 +42,3 @@
       </a>
     </div>
   </div>
-{% endif %}

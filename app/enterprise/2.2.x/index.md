@@ -21,15 +21,15 @@ is_homepage: true
   </div>
 
   <div class="docs-grid-block">
-    <h3><a href="/getting-started-guide/latest/overview">Getting Started</a></h3>
+    <h3><a href="/gateway/latest/get-started/comprehensive/">Getting Started</a></h3>
     <p>Whether you’re an open-source or {{site.konnect_product_name}} user, use this guide to familiarize yourself with {{site.base_gateway}} concepts and learn how to use important features and capabilities.</p>
-    <a href="/getting-started-guide/latest/overview">Get Started &rarr;</a>
+    <a href="/gateway/latest/get-started/comprehensive/">Get Started &rarr;</a>
   </div>
 
   <div class="docs-grid-block">
-    <h3><a href="/enterprise/changelog">Changelog</a></h3>
+    <h3><a href="/gateway/changelog">Changelog</a></h3>
     <p>Review the details of the changes made to each version of {{site.ee_product_name}}.</p>
-    <a href="/enterprise/changelog/">See changelog &rarr;</a>
+    <a href="/gateway/changelog/">See changelog &rarr;</a>
   </div>
 
   <h2 class="docs-grid-section-title">Popular Guides and References</h2>
@@ -50,12 +50,6 @@ is_homepage: true
     <h3><a href="/enterprise/{{page.kong_version}}/deployment/kong-for-kubernetes-enterprise">Kong for Kubernetes Enterprise</a></h3>
     <p>Get started with Kong for Kubernetes Enterprise.</p>
     <a href="/enterprise/{{page.kong_version}}/deployment/kong-for-kubernetes-enterprise">Learn more &rarr;</a>
-  </div>
-
-  <div class="docs-grid-block">
-    <h3><a href="/enterprise/{{page.kong_version}}/immunity/install-configure">Kong Immunity</a></h3>
-    <p>Install and configure Kong Immunity.</p>
-    <a href="/enterprise/{{page.kong_version}}/immunity/install-configure">Learn more &rarr;</a>
   </div>
 
 </div>

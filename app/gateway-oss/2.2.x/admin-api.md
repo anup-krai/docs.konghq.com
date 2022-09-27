@@ -1408,17 +1408,6 @@ Attributes | Description
 `certificate id`<br>**required** | The unique identifier of the Certificate to delete.
 `service name or id`<br>**required** | The unique identifier **or** the name of the Service to delete.
 
-
-##### Delete Service Associated to a Specific Route
-
-<div class="endpoint delete indent">/routes/{route name or id}/service</div>
-
-{:.indent}
-Attributes | Description
----:| ---
-`route name or id`<br>**required** | The unique identifier **or** the name of the Route associated to the Service to be deleted.
-
-
 #### Response
 
 ```
@@ -3189,17 +3178,6 @@ Attributes | Description
 `certificate id`<br>**required** | The unique identifier of the Certificate to retrieve.
 `upstream name or id`<br>**required** | The unique identifier **or** the name of the Upstream to retrieve.
 
-
-##### Retrieve Upstream Associated to a Specific Target
-
-<div class="endpoint get indent">/targets/{target host:port or id}/upstream</div>
-
-{:.indent}
-Attributes | Description
----:| ---
-`target host:port or id`<br>**required** | The unique identifier **or** the host:port of the Target associated to the Upstream to be retrieved.
-
-
 #### Response
 
 ```
@@ -3210,12 +3188,10 @@ HTTP 200 OK
 {{ page.upstream_json }}
 ```
 
-
 ---
 
 ### Update Upstream
 
-##### Update Upstream
 
 <div class="endpoint patch indent">/upstreams/{upstream name or id}</div>
 
@@ -3225,7 +3201,7 @@ Attributes | Description
 `upstream name or id`<br>**required** | The unique identifier **or** the name of the Upstream to update.
 
 
-##### Update Upstream Associated to a Specific Certificate
+#### Update Upstream Associated to a Specific Certificate
 
 <div class="endpoint patch indent">/certificates/{certificate id}/upstreams/{upstream name or id}</div>
 
@@ -3234,17 +3210,6 @@ Attributes | Description
 ---:| ---
 `certificate id`<br>**required** | The unique identifier of the Certificate to update.
 `upstream name or id`<br>**required** | The unique identifier **or** the name of the Upstream to update.
-
-
-##### Update Upstream Associated to a Specific Target
-
-<div class="endpoint patch indent">/targets/{target host:port or id}/upstream</div>
-
-{:.indent}
-Attributes | Description
----:| ---
-`target host:port or id`<br>**required** | The unique identifier **or** the host:port of the Target associated to the Upstream to be updated.
-
 
 #### Request Body
 
@@ -3285,16 +3250,6 @@ Attributes | Description
 ---:| ---
 `certificate id`<br>**required** | The unique identifier of the Certificate to create or update.
 `upstream name or id`<br>**required** | The unique identifier **or** the name of the Upstream to create or update.
-
-
-##### Create Or Update Upstream Associated to a Specific Target
-
-<div class="endpoint put indent">/targets/{target host:port or id}/upstream</div>
-
-{:.indent}
-Attributes | Description
----:| ---
-`target host:port or id`<br>**required** | The unique identifier **or** the host:port of the Target associated to the Upstream to be created or updated.
 
 
 #### Request Body
@@ -3349,17 +3304,6 @@ Attributes | Description
 ---:| ---
 `certificate id`<br>**required** | The unique identifier of the Certificate to delete.
 `upstream name or id`<br>**required** | The unique identifier **or** the name of the Upstream to delete.
-
-
-##### Delete Upstream Associated to a Specific Target
-
-<div class="endpoint delete indent">/targets/{target host:port or id}/upstream</div>
-
-{:.indent}
-Attributes | Description
----:| ---
-`target host:port or id`<br>**required** | The unique identifier **or** the host:port of the Target associated to the Upstream to be deleted.
-
 
 #### Response
 
@@ -3476,8 +3420,7 @@ A target is an ip address/hostname with a port that identifies an instance of a 
 service. Every upstream can have many targets, and the targets can be
 dynamically added. Changes are effectuated on the fly.
 
-Because the upstream maintains a history of target changes, the targets cannot
-be deleted or modified. To disable a target, post a new one with `weight=0`;
+To disable a target, post a new one with `weight=0`;
 alternatively, use the `DELETE` convenience method to accomplish the same.
 
 The current target object definition is the one with the latest `created_at`.

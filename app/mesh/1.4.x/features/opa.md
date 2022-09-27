@@ -21,6 +21,56 @@ To apply a policy with OPA:
 - Provide the list of policies with the `conf` property. Policies are defined in the [Rego language](https://www.openpolicyagent.org/docs/latest/policy-language/).
 - Optionally provide custom configuration for the policy agent.
 
+You must also specify the HTTP protocol in your mesh configuration:
+
+{% navtabs %}
+{% navtab Kubernetes %}
+
+Add the HTTP protocol annotation to the Kubernetes Service configuration, with the general syntax `<port>.service.kuma.io/protocol`.
+
+Example:
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: web
+  namespace: kong-mesh-example
+  annotations:
+    8080.service.kuma.io/protocol: http # required for OPA support
+spec:
+  selector:
+    app: web
+  ports:
+  - port: 8080
+```
+
+{% endnavtab %}
+{% navtab Universal %}
+
+Add the HTTP protocol tag to the `Dataplane` configuration.
+
+Example:
+
+```yaml
+type: Dataplane
+mesh: default
+name: web
+networking:
+  address: 192.168.0.1 
+  inbound:
+  - port: 80
+    servicePort: 8080
+    tags:
+      kuma.io/service: web
+      kuma.io/protocol: http # required for OPA support
+```
+
+{% endnavtab %}
+{% endnavtabs %}
+
+For more information, see [the Kuma documentation about protocol support](https://kuma.io/docs/latest/policies/protocol-support-in-kuma/).
+
 ### Inline
 
 {% navtabs %}
@@ -123,7 +173,7 @@ conf:
 
 ### With Secrets
 
-Encoding the policy in a [Secret](https://kuma.io/docs/1.0.7/documentation/secrets/#universal) provides some security for policies that contain sensitive data.
+Encoding the policy in a [Secret](https://kuma.io/docs/latest/security/secrets) provides some security for policies that contain sensitive data.
 
 {% navtabs %}
 {% navtab Kubernetes %}
@@ -543,7 +593,7 @@ The following example shows how to deploy and test a sample OPA Policy on Kubern
 1.  Make a valid request from the frontend to the backend:
 
     ```
-    $ export ADMIN_TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJzdWIiOiJZbTlpIiwibmJmIjoxNTE0ODUxMTM5LCJleHAiOjE2NDEwODE1Mzl9.WCxNAveAVAdRCmkpIObOTaSd0AJRECY2Ch2Qdic3kU8"
+    $ export ADMIN_TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJzdWIiOiJZbTlpIiwibmJmIjoxNTE0ODUxMTM5LCJleHAiOjI1MjQ2MDgwMDB9.H0-42LYzoWyQ_4MXAcED30u6lA5JE087eECV2nxDfXo"
     $ kubectl exec -i -t $(kubectl get pod -l "app=kuma-demo-frontend" -o jsonpath='{.items[0].metadata.name}' -n kuma-demo) -n kuma-demo -- curl -H "Authorization: Bearer $ADMIN_TOKEN" backend:3001
     ```
 

@@ -1,6 +1,5 @@
 ---
 title: Kong for Kubernetes Deployment Options
-redirect_from: "/enterprise/2.1.x/kong-for-kubernetes/deployment-options"
 ---
 
 Kong for Kubernetes consists of a controller, which translates Kubernetes
@@ -63,8 +62,6 @@ Some Kong Enterprise features are not available in DB-less deployments.
 Use a database-backed deployment if you want to use:
 
 * Dev Portal
-* Brain
-* Immunity
 * Teams (RBAC)
 * Workspaces
 

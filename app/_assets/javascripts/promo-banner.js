@@ -1,13 +1,15 @@
 jQuery(document).ready(function () {
-  var closed = localStorage.getItem("closebanner-hackathon");
+  var closed = localStorage.getItem("closebanner-summit-2022");
   if (
     closed !== "closebanner"
   ) {
     $(".navbar-v2").removeClass("closed");
     $("body").addClass("banner");
+    $("#mosaic-provider-react-aria-0-1").addClass("banner-offset");
   } else {
     $(".navbar-v2").addClass("closed");
     $("body").removeClass("banner");
+    $("#mosaic-provider-react-aria-0-1").removeClass("banner-offset");
   }
 });
 var scrolling = false;
@@ -26,5 +28,6 @@ setInterval(function () {
 }, 10);
 $(".closebanner").on("click", function () {
   $(".navbar-v2").addClass("closed");
-  localStorage.setItem("closebanner-hackathon", "closebanner");
+  localStorage.setItem("closebanner-summit-2022", "closebanner");
+  $("#mosaic-provider-react-aria-0-1").removeClass("banner-offset");
 });

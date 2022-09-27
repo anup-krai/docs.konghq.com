@@ -1,8 +1,5 @@
 ---
 title: Vitals with InfluxDB
-redirect_from: 
-  - /enterprise/2.2.x/admin-api/vitals/vitals-influx-strategy
-  - /enterprise/latest/admin-api/vitals/vitals-influx-strategy
 ---
 
 ## Improve Vitals performance with InfluxDB
@@ -24,7 +21,7 @@ PostgreSQL, Cassandra), refer to
 If you already have a {{site.base_gateway}} instance, skip to [Step 2](#step-2-deploy-a-kong-gateway-enterprise-license).
 
 If you have not installed {{site.base_gateway}}, a Docker installation
-will work for the purposes of this guide. 
+will work for the purposes of this guide.
 
 {% include /md/2.4.x/docker-install-steps.md heading="#### " heading1="#### " heading2="#### " heading3="#### " kong_versions=page.kong_versions %}
 
@@ -87,13 +84,13 @@ $ docker run -p 8086:8086 \
 > You **must** use InfluxDB 1.8.4-alpine because
 InfluxDB 2.0 will **not** work.  
 
-Writing Vitals data to InfluxDB requires that the `kong` database is created, 
+Writing Vitals data to InfluxDB requires that the `kong` database is created,
 this is done using the `INFLUXDB_DB` variable.
 
 ### Step 4. Configure Kong Gateway
 
 {:.note}
-> **Note:** If you used the configuration in 
+> **Note:** If you used the configuration in
 [Step 1. Installing {{site.base_gateway}} on Docker](#step-1-install-kong-gateway),
 then you do not need to complete this step.
 
@@ -105,15 +102,20 @@ $ echo "KONG_VITALS_STRATEGY=influxdb KONG_VITALS_TSDB_ADDRESS=influxdb:8086 kon
 | docker exec -i kong-ee /bin/sh
 ```
 
+{:.note}
+> **Note**: In Hybrid Mode, configure [`vitals_strategy`](/enterprise/{{page.kong_version}}/property-reference/#vitals_strategy) 
+and [`vitals_tsdb_address`](/enterprise/{{page.kong_version}}/property-reference/#vitals_tsdb_address) 
+on both the control plane and all data planes.
+
 ## Understanding Vitals data using InfluxDB measurements
 
-Kong Vitals records metrics in two InfluxDB measurements: 
+Kong Vitals records metrics in two InfluxDB measurements:
 
 1. `kong_request`: Contains field values for request latencies and HTTP,
   and tags for various Kong entities associated with the requests (for
   example, the Route and Service in question).
 2. `kong_datastore_cache`: Contains points about cache hits and
-  misses. 
+  misses.
 
 To display the measurement schemas on your InfluxDB instance running
 in Docker:
@@ -190,13 +192,13 @@ duplicate metrics shipped at the same point in time.
 As demonstrated above, the series cardinality of the `kong_request` measurement
 varies based on the cardinality of the Kong cluster configuration - a greater
 number of Service/Route/Consumer/Workspace combinations handled by Kong results
-in a greater series cardinality as written by Vitals. 
+in a greater series cardinality as written by Vitals.
 
 ## Sizing an InfluxDB node/cluster for Vitals
 
 Consult the
 [InfluxDB sizing guidelines](https://docs.influxdata.com/influxdb/v1.8/guides/hardware_sizing/)
-for reference on appropriately sizing an InfluxDB node/cluster. 
+for reference on appropriately sizing an InfluxDB node/cluster.
 
 {:.note}
 > **Note:** The query behavior when reading Vitals data falls under the "moderate" load
@@ -214,7 +216,7 @@ whichever comes first.
 
 Metrics points are written with microsecond (`u`) precision. To comply with
 the [Vitals API](/enterprise/{{page.kong_version}}/admin-api/vitals/#vitals-api), measurement
-values are read back grouped by second. 
+values are read back grouped by second.
 
 {:.note}
 > **Note:** Because of limitations in the OpenResty API, writing values with
@@ -225,6 +227,4 @@ microsecond precision requires an additional syscall per request.
 Vitals InfluxDB data points are not downsampled or managed by a
 retention policy through Kong. InfluxDB operators are encouraged to manually manage
 the retention policy of the `kong` database to reduce the disk space and memory
-needed to manage Vitals data points. Kong Vitals ignores data points
-older than 25 hours, so it is safe to create a retention policy with a 25-hour
-duration for measurements written by Kong.
+needed to manage Vitals data points.

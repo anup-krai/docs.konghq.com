@@ -7,7 +7,8 @@ body_id: page-hub
 
 ---
 
-{% assign hub = site.hub %}
+{% assign hub = site.data.ssg_hub %}
+
 {% assign kong_extns = hub | where: "publisher", "Kong Inc." %}
 {% assign third_extns = hub | where_exp: "extn", "extn.publisher != 'Kong Inc.'" %}
 {% assign categories = site.extensions.categories %}
@@ -30,7 +31,7 @@ body_id: page-hub
               </a>
             </li>
             <li class="nav-item" role="menuitem">
-              <a class="nav-link" href="/konnect-platform/compatibility/plugins">
+              <a class="nav-link" href="/hub/plugins/compatibility/">
                 Compatibility
               </a>
             </li>
@@ -43,11 +44,16 @@ body_id: page-hub
               </a>
             </li>
             <li class="nav-item">
+              <a class="nav-link" data-filter="konnect-cloud" role="menuitem" tabindex="0">
+                Konnect
+              </a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link" data-filter="pub-not-konghq" role="menuitem" tabindex="0">
                 Third-Party
               </a>
             </li>
-            <p class="no-link">{{site.konnect_short_name}} license tiers</p>
+            <p class="no-link">Subscription tiers</p>
             <li class="nav-item">
               <a class="nav-link" data-filter="open-source" role="menuitem" tabindex="0">
                 Free
@@ -74,9 +80,24 @@ body_id: page-hub
               </li>
             {% endfor %}
           </ul>
-          <!-- <div class="cta-container">
-            <a class="nav-link" href="/contributing/plugin-docs" target="_blank">List your plugin here</a>
-          </div> -->
+          <h3>Custom Plugins</h3>
+          <ul class="nav flex-column" id="custom-plugins" role="menu">
+              <li class="nav-item" role="menuitem">
+                <a class="nav-link" href="/gateway/latest/pdk" target="_blank">
+                  PDK reference
+                </a>
+              </li>
+              <li class="nav-item" role="menuitem">
+                <a class="nav-link" href="/gateway/latest/plugin-development" target="_blank">
+                  Plugin development guide
+                </a>
+              </li>
+              <li class="nav-item" role="menuitem">
+                <a class="nav-link" href="/gateway/latest/reference/external-plugins" target="_blank">
+                  Plugins in other languages
+                </a>
+              </li>
+          </ul>
         </div>
       </div>
       <div class="hub-cards">

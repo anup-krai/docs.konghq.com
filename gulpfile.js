@@ -4,7 +4,6 @@ var browserSync = require("browser-sync").create();
 var childProcess = require("child_process");
 var log = require("fancy-log");
 var del = require("del");
-var ghPages = require("gh-pages");
 var gulp = require("gulp");
 var path = require("path");
 var fs = require("fs");
@@ -21,7 +20,10 @@ var paths = {
 
 // Sources
 var sources = {
-  content: "app/**/*.{markdown,md,html,txt,yml,yaml}",
+  content: [
+    "app/**/*.{markdown,md,html,txt,yml,yaml}",
+    "src/**/*.{markdown,md,html,txt,yml,yaml}"
+  ],
   styles: paths.assets + "stylesheets/**/*",
   js: [
     paths.assets + "javascripts/jquery-3.6.0.min.js",
@@ -33,7 +35,7 @@ var sources = {
     paths.assets + "javascripts/feedback-widget.js",
     // uncomment the path to promo-banner.js when adding a new promo banner
     // also uncomment the promo banner sections in app/_assets/stylesheets/header.less and /app/_includes/nav-v2.html -->
-    // paths.assets + "javascripts/promo-banner.js",
+    paths.assets + "javascripts/promo-banner.js",
     paths.assets + "javascripts/copy-code-snippet-support.js"
   ],
   images: paths.assets + "images/**/*",
@@ -120,23 +122,13 @@ function jekyll(cb) {
     profile = "-dev";
   }
 
-  var command =
-    `bundle exec jekyll build --config jekyll${profile}.yml --profile --destination ` +
-    paths.dist;
+  var command = `bundle exec jekyll build --config jekyll${profile}.yml --profile`
 
   childProcess.exec(command, function (err, stdout, stderr) {
     log(stdout);
     log(stderr);
     cb(err);
   });
-}
-
-function html() {
-  return gulp
-    .src(paths.dist + "/**/*.html")
-    .pipe($.plumber())
-    .pipe(gulp.dest(paths.dist))
-    .pipe($.if(!dev, $.size()));
 }
 
 // Lua Tasks
@@ -377,12 +369,11 @@ var reload_browser = (done) => {
 };
 
 function clean() {
-  ghPages.clean();
-  return del(["dist", ".gh-pages"]);
+  return del(["dist"]);
 }
 
 function watch_files() {
-  gulp.watch(sources.content, gulp.series(jekyll, html, reload_browser));
+  gulp.watch(sources.content, gulp.series(jekyll, reload_browser));
   gulp.watch(sources.styles, styles);
   gulp.watch(sources.images, gulp.series(images, reload_browser));
   gulp.watch(sources.js, gulp.series(js, reload_browser));
@@ -404,7 +395,6 @@ gulp.task("styles", styles);
 gulp.task("images", gulp.series(set_dev, images));
 gulp.task("fonts", fonts);
 gulp.task("jekyll", jekyll);
-gulp.task("html", html);
 
 // Lua Tasks
 gulp.task("pdk_docs", pdk_docs);
@@ -425,10 +415,8 @@ function build_site(steps, append) {
   // These are the steps that always run for every build
   // If set_dev is called, some of these methods behave differently
   steps = steps.concat([
-    clean,
     gulp.parallel(js, images, fonts, css),
     jekyll,
-    html,
     styles,
   ]);
 

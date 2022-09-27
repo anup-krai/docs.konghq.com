@@ -1,4 +1,6 @@
 # Build settings
+# This file is for local builds
+# Any changes made in this file should also be made in jekyll.yml
 source: app
 destination: dist
 permalink: pretty
@@ -23,6 +25,7 @@ links:
   share: https://docs.konghq.com # legacy link, must maintain for social sharing counters
   download: https://download.konghq.com
   instaclustr: "https://www.instaclustr.com/products/kong/?utm_source=partnership&utm_medium=link&utm_campaign=mashape"
+  learn: https://education.konghq.com # kong academy
 repos:
   kong: https://github.com/Kong/kong
   docs: https://github.com/Kong/docs.konghq.com
@@ -71,15 +74,14 @@ extensions:
     # - name: dev portal extension
     #   slug: dev-mod
 
-include:
-  - _redirects
-
 exclude:
   - node_modules
   - jekyll-cache
 
 # location vars
 icons_dir: assets/images/icons
+include:
+  - _headers
 
 plugins:
   - jekyll-redirect-from
@@ -127,6 +129,35 @@ defaults:
       layout: "docs-v2"
 
   - scope:
+      path: "gateway"
+    values:
+      layout: "docs-v2"
+
+  - scope:
+      path: "gateway/2.6.x/"
+    values:
+      layout: "docs-v2"
+      version-index: 0
+
+  - scope:
+      path: "gateway/2.7.x/"
+    values:
+      layout: "docs-v2"
+      version-index: 1
+
+  - scope:
+      path: "gateway/2.8.x/"
+    values:
+      layout: "docs-v2"
+      version-index: 2
+
+  - scope:
+      path: "gateway/3.0.x/"
+    values:
+      layout: "docs-v2"
+      version-index: 3
+
+  - scope:
       path: "about"
     values:
       layout: "about"
@@ -145,19 +176,13 @@ defaults:
       layout: "docs-v2"
 
 # product name vars
-ee_gateway_name: Kong Gateway
-ee_product_name: Kong Gateway (Enterprise)
+ee_product_name: Kong Enterprise
 ce_product_name: Kong Gateway (OSS)
 base_gateway: Kong Gateway
 mesh_product_name: Kong Mesh
 kic_product_name: Kubernetes Ingress Controller
 konnect_product_name: Kong Konnect
 konnect_short_name: Konnect
-konnect_saas: Konnect Cloud
+konnect_saas: Kong Konnect
 package_name: Kong Konnect
 company_name: Kong Inc.
-
-# Konnect tier vars
-free_tier: Kong Gateway
-plus_tier: Kong Konnect Plus
-enterprise_tier: Kong Konnect Enterprise

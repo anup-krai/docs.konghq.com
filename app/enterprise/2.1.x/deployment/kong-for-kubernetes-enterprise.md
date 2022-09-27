@@ -1,6 +1,5 @@
 ---
 title: Kong for Kubernetes Enterprise
-redirect_from: "/enterprise/2.1.x/kong-for-kubernetes/"
 ---
 
 Kong provides two main Enterprise packages that you can deploy with Kubernetes,
@@ -25,7 +24,7 @@ the vast majority of Kong's plugins, including the Enterprise plugins.
 
 <div class="alert alert-ee warning">
 <strong>Important:</strong> Enterprise features such as Kong Manager, Kong
-Vitals (analytics), Kong Developer Portal, RBAC, Immunity, Workspaces and many
+Vitals (analytics), Kong Developer Portal, RBAC, Workspaces and many
 others can't run in this deployment because they require a database.
 </div>
 

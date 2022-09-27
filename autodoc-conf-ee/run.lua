@@ -140,7 +140,7 @@ infd:close()
 
 local parsed = assert(parser.parse(lines))
 
-local outpath = "app/enterprise/" .. KONG_VERSION .. "/property-reference.md"
+local outpath = "src/gateway/reference/configuration.md"
 local outfd = assert(io.open(outpath, "w+"))
 
 outfd:write(data.header)
@@ -153,13 +153,13 @@ end
 
 
 for _, section in ipairs(parsed) do
+  write("---")
   write("")
-  write("### " .. titleize(section.name) .. " section")
+  write("## " .. titleize(section.name) .. " section")
   write("")
   if #section.description > 0 then
     write(format_description(section.description))
     write("")
-    write("---")
     write("")
   end
 
@@ -174,7 +174,7 @@ for _, section in ipairs(parsed) do
       if not pg_found then
         pg_found = true
         write("")
-        write("#### Postgres settings")
+        write("### Postgres settings")
         write("")
         write(table_header)
       end
@@ -184,7 +184,7 @@ for _, section in ipairs(parsed) do
       if not cassandra_found then
         cassandra_found = true
         write("")
-        write("#### Cassandra settings")
+        write("### Cassandra settings")
         write("")
         write(table_header)
       end
@@ -202,13 +202,48 @@ for _, section in ipairs(parsed) do
               " | " .. format_default(var.default))
 
     else
-      write("#### " .. var.name)
+      write("### " .. var.name)
+      if string.match(var.name, "admin_gui_auth") then
+        write("{:.badge .enterprise}")
+
+      elseif string.match(var.name, "admin_gui_session") then
+        write("{:.badge .enterprise}")
+
+      elseif string.match(var.name, "cluster_telemetry") then
+        write("{:.badge .enterprise}")
+
+      elseif string.match(var.name, "rbac") then
+        write("{:.badge .enterprise}")
+
+      elseif string.match(var.name, "event_hooks") then
+        write("{:.badge .enterprise}")
+
+      elseif string.match(var.name, "keyring") then
+        write("{:.badge .enterprise}")
+
+      elseif string.match(section.name, "PORTAL") then
+        write("{:.badge .enterprise}")
+
+      elseif string.match(section.name, "KONG MANAGER") then
+        write("{:.badge .free}")
+
+      elseif string.match(section.name, "VITALS") then
+        write("{:.badge .enterprise}")
+
+      elseif string.match(section.name, "SMTP") then
+        write("{:.badge .enterprise}")
+
+      elseif string.match(section.name, "GRANULAR TRACING") then
+        write("{:.badge .enterprise}")
+
+      elseif string.match(section.name, "ROUTE COLLISION") then
+        write("{:.badge .enterprise}")
+      end
       write("")
       write(format_description(var.description))
       write("")
       write("**Default:** " .. format_default(var.default))
       write("")
-      write("---")
       write("")
     end
   end

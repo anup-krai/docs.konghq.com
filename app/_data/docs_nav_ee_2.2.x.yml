@@ -12,8 +12,10 @@
     - text: Release Notes
       url: /release-notes
     - text: Changelog
-      url: /enterprise/changelog
+      url: /gateway/changelog
       absolute_url: true
+    - text: Compatibility
+      url: /compatibility/
     - text: Version Support
       url: /support-policy
 
@@ -131,23 +133,23 @@
   icon: /assets/images/icons/documentation/icn-quickstart-color.svg
   items:
     - text: Overview
-      url: /../../getting-started-guide/latest/overview
+      url: /../../getting-started-guide/2.2.x/overview
     - text: Prepare to Administer
-      url: /../../getting-started-guide/latest/prepare
+      url: /../../getting-started-guide/2.2.x/prepare
     - text: Expose your Services
-      url: /../../getting-started-guide/latest/expose-services
+      url: /../../getting-started-guide/2.2.x/expose-services
     - text: Protect your Services
-      url: /../../getting-started-guide/latest/protect-services
+      url: /../../getting-started-guide/2.2.x/protect-services
     - text: Improve Performance
-      url: /../../getting-started-guide/latest/improve-performance
+      url: /../../getting-started-guide/2.2.x/improve-performance
     - text: Secure Services
-      url: /../../getting-started-guide/latest/secure-services
+      url: /../../getting-started-guide/2.2.x/secure-services
     - text: Set Up Intelligent Load Balancing
-      url: /../../getting-started-guide/latest/load-balancing
+      url: /../../getting-started-guide/2.2.x/load-balancing
     - text: Manage Administrative Teams
-      url: /../../getting-started-guide/latest/manage-teams
+      url: /../../getting-started-guide/2.2.x/manage-teams
     - text: Publish, Locate, and Consume Services
-      url: /../../getting-started-guide/latest/dev-portal
+      url: /../../getting-started-guide/2.2.x/dev-portal
 
 - title: Guides & References
   icon: /assets/images/icons/documentation/icn-references-color.svg
@@ -446,24 +448,6 @@
       url: /vitals/vitals-influx-strategy
     - text: Vitals with Prometheus
       url: /vitals/vitals-prometheus-strategy
-
-- title: Kong Immunity
-  icon: /assets/images/icons/documentation/icn-immunity-color.svg
-  items:
-    - text: Overview
-      url: /immunity/overview
-    - text: Installation and Configuration
-      url: /immunity/install-configure
-    - text: Alerts
-      url: /immunity/alerts
-    - text: Model Training
-      url: /immunity/model-training
-    - text: Slack Integration
-      url: /immunity/slack-integration
-    - text: Troubleshooting
-      url: /immunity/troubleshooting
-    - text: Changelog
-      url: /immunity/changelog
 
 - title: Plugins
   icon: /assets/images/icons/documentation/icn-api-plugins-color.svg

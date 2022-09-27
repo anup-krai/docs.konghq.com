@@ -1,11 +1,30 @@
 {% unless include.name and include.path contains '_hub' %}
 {% capture page_title %}{{
 include.title | escape }}{% if include.kong_version and include.no_version != true %} - v{{ include.kong_version | escape }}{% endif %}{% if include.title %} | {% endif %}{{
-site.title }}{% endcapture %} {% else %} {% capture page_title %}{% if page.path contains "/hub/" %}{{ include.title }}{% else %}{{ include.name }}{% endif %}
+site.title }}{% endcapture %} {% else %} {% capture page_title %}{% if include.path contains "/hub/" %}{{ include.title }}{% else %}{{ include.name }}{% endif %}
 {{ include.type }} | {{site.title}}{% endcapture %}
 {% endunless %}
 
 <head>
+
+  {% if jekyll.environment == "production" %}
+  <!-- OneTrust Cookies Consent Notice start for konghq.com -->
+  <script
+    type="text/javascript"
+    src="https://cdn.cookielaw.org/consent/2c4de954-6bec-4e93-8086-64cb113f151a/OtAutoBlock.js" >
+  </script>
+  <script
+    src="https://cdn.cookielaw.org/scripttemplates/otSDKStub.js"
+    type="text/javascript"
+    charset="UTF-8"
+    data-domain-script="2c4de954-6bec-4e93-8086-64cb113f151a" >
+  </script>
+  <script type="text/javascript">
+  function OptanonWrapper() { }
+  </script>
+  <!-- OneTrust Cookies Consent Notice end for konghq.com -->
+  {% endif %}
+
   <!-- Google Tag Manager -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
   new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -46,12 +65,12 @@ site.title }}{% endcapture %} {% else %} {% capture page_title %}{% if page.path
     name="google-site-verification"
     content="CrU3zp02dNKTe8NSAipL4NCPkrIjDXG8fViTZ-MIzP4"
   />
-  <link
-    rel="stylesheet"
-    href="https://use.fontawesome.com/releases/v5.4.1/css/all.css"
-    integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz"
-    crossorigin="anonymous"
-  />
+
+  <!-- FontAwesome icon font -->
+  <script
+    src="https://kit.fontawesome.com/1332a92967.js" 
+    crossorigin="anonymous">
+  </script>
 
   <!-- New Relic -->
   {% include newrelic.html %}
@@ -99,13 +118,15 @@ site.title }}{% endcapture %} {% else %} {% capture page_title %}{% if page.path
   />
 
   {% assign latest_include.url = include.url | replace: include.kong_version, include.kong_latest.release %}
-  {% capture latest_page_exists %}{% page_exists {{latest_include.url}} %}{% endcapture %}
+  
+  {% if include.canonical_url %}
+    <link rel="canonical" href="{{site.links.web}}{{ include.canonical_url }}" />
+  {% endif %}
 
-  {% if include.kong_version == include.kong_latest.release and include.no_version != true %}<link rel="canonical" href="{{ site.links.web }}{{ include.url }}" />
-    {% elsif latest_page_exists == 'true' %}<link rel="canonical" href="{% capture latest_path %}{{ site.links.web }}{{ latest_include.url }}{% endcapture %}{{ latest_path }}" />
+  {% if include.seo_noindex %}
+  <meta name="robots" content="follow,noindex" />
+  {% else %}
+  <meta name="robots" content="follow,index" />
   {% endif %}
 
 </head>
-
-<!-- Kong Cookie Policy -->
-{% include cookie-policy.html %}

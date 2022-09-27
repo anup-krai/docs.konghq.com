@@ -15,18 +15,18 @@ Plugin Hub docs have specialized front matter elements. See the
 
 **Required:**
 
-`title: {PAGE_TITLE}`
+`title: PAGE_TITLE`
 : The title of the topic you're adding.
+
+`content_type: how-to | explanation | reference | tutorial`
+: Add a tag to the front matter of each topic that you edit.
+Add the tag that most closely resembles the concept, even if it doesn’t perfectly align with a tag.
 
 **Optional:**
 
 `no_version: true`
 : Disables the version selector dropdown. Set this on pages that belong to
-unversioned doc sets like `/konnect/`.
-
-`toc: false`
-: Disables the right-hand nav for the page; useful if the page is short and has
-one or no headers.
+doc sets without versions like `/konnect/`.
 
 `beta: true` or `alpha: true`
 : Labels the page as beta or alpha; adds a banner to the top of the page.
@@ -36,11 +36,11 @@ one or no headers.
 
 `class: no-copy-code`
 : Disables the copy code button ( <i class="fa fa-copy"></i> ) for all
-codeblocks on the page.
+code blocks on the page.
 
 ### Examples
 
-A versionless Konnect page for a beta feature:
+A {{site.konnect_short_name}} page without a version for a beta feature:
 
 ```yaml
 ---
@@ -50,40 +50,46 @@ beta: true
 ---
 ```
 
-A Kong Gateway doc (with versions) that you don't want people to copy code from
-and has no headings, so you also want to disable the page nav:
+A {{site.base_gateway}} doc (with versions) that you don't want people to copy code from,
+and where you don't want any of the images to be expandable:
 
 ```yaml
 ---
 title: My Gateway API Doc
 class: no-copy-code
-toc: false
+disable_image_expand: true
 ---
 ```
 
 
 ## Variables
+
 Use variables for product names and release versions. See
 [Variables](/contributing/variables) for syntax and when to use each one.
 
+## Headers
+
+Headers should not contain any code. Use plain text instead.
+
+Use sentence case for all headers, per [Content best practices](/contributing/style-guide/#content-best-practices).
 
 ## Links
 
 ### Content in markdown files
 
-* **Use relative links:** In markdown (`.md`) files, use links relative to the root
+- **Use relative links:** In markdown (`.md`) files, use links relative to the root
 domain (`docs.konghq.com`).
 
-    For example, if the final link for a page will be `docs.konghq.com/konnect/servicehub`,
-    you would write `/konnect/servicehub`.
+   For example, if the final link for a page will be `https://docs.konghq.com/contributing`,
+    you would write `/contributing`.
 
-* **Use version variables when possible:** For versioned doc sets such as Kong
-Gateway and Kong Mesh, use the page version variable.
+- **Use version variables when possible:** For versioned doc sets such as
+{{site.base_gateway}} and Kong Mesh, use the page version variable.
 
     For example: {% raw %}`/enterprise/{{page.kong_version}}/file`{% endraw %}
 
-* **Use `latest` in unversioned docs:** If you're linking to a versioned topic
-from an unversioned topic, use `/latest/` instead of a version name or variable.
+- **Use `latest` in docs without versions:** If you're linking to a versioned topic
+from an topic without versions, use `/latest/` instead of a version name or variable.
 
 ### Add new entries to the ToC
 
@@ -98,8 +104,8 @@ the nav file would be `/overview`, and you would add it to the file
 
 ### Add redirects
 
-If you're making an organization change like updating page nesting or renaming a top-level 
-menu item, you'll need to set up a redirect. Redirects prevent `404` pages, and 
+If you're making an organization change like updating page nesting or renaming a top-level
+menu item, you'll need to set up a redirect. Redirects prevent `404` pages, and
 redirect users automatically to the new content location.
 
 1. Navigate to `app` then `_redirects`.
@@ -110,9 +116,9 @@ redirect users automatically to the new content location.
 ```bash
 \\ Start the link with what appears after https://docs.konghq.com/.
 
-\\ In the following example, we created a new menu section called Applications 
+\\ In the following example, we created a new menu section called Applications
 in the Dev Portal section of the docs. And we moved the dev-apps page to our
-new menu section. 
+new menu section.
 
 /konnect/dev-portal/developers/dev-apps                    /konnect/dev-portal/applications/dev-apps
 ```
@@ -123,10 +129,10 @@ in the documentation to the new links. **Don't** rely on redirects to change
 internal links. Redirects are not great for SEO (search engine optimization),
 and they create slower page loading times, especially if there's a redirect chain.
 
-## Codeblocks
+## Code blocks
 
-Codeblocks are containers for your code examples. In Markdown, you can create
-them using three backticks, or fenced codeblocks:
+Code blocks are containers for your code examples. In Markdown, you can create
+them using three backticks, or fenced code blocks:
 
 ````
 ```bash
@@ -135,31 +141,32 @@ some code here
 ````
 
 Include a language whenever possible (in the example above, that language is
-`bash`). This will format your codeblocks using language-specific syntax.
+`bash`). This will format your code blocks using language-specific syntax.
 
-You can also create tabbed codeblocks, so that users can easily switch to
-their preferred format. See [tabs for codeblocks](#tabs-for-codeblocks).
+You can also create tabbed code blocks, so that users can easily switch to
+their preferred format. See [tabs for code blocks](#tabs-for-code-blocks).
 
-If you're including placeholders in codeblocks, use HTML tags instead of
-backticks. See [editable placeholders](#editable-placeholders-in-codeblocks).
+<!-- If you're including placeholders in code blocks, use HTML tags instead of
+backticks. See [editable placeholders](#editable-placeholders-in-code-blocks). -->
 
 ## Placeholders
 
-Use placeholders in both inline text and in codeblocks to
+Use placeholders in both inline text and in code blocks to
 denote a value that the user should edit. Always enclose placeholders in code
 formatting.
 
 ### Inline placeholders
 
 If you're adding a placeholder inline, such as in a sentence, enclose it in single
-backticks: \`{EXAMPLE_TEXT}`
+backticks: \`EXAMPLE_TEXT`
 
-### Editable placeholders in codeblocks
+<!--
+### Editable placeholders in code blocks
 
-If you have text in your codeblock that you want the user to edit before running
+If you have text in your code block that you want the user to edit before running
 the code, you can use editable placeholders.
 
-Editable placeholders require HTML markup. They are not supported in pure markdown (fenced) codeblocks.
+Editable placeholders require HTML markup. They are not supported in pure markdown (fenced) code blocks.
 
 {:.important}
 > **Important:** Use plaintext placeholders for sensitive personal
@@ -171,16 +178,17 @@ information includes:
 
 #### Create an editable placeholder
 
-* Enclose the entire codeblock in a `<div>` tag with a "copy-code-snippet" class: `<div class="copy-code-snippet"></div>`
-* Use the `<pre>` and `<code>` tags to create a codeblock
+* Enclose the entire code block in a `<div>` tag with a "copy-code-snippet" class: `<div class="copy-code-snippet"></div>`
+* Use the `<pre>` and `<code>` tags to create a code block
 * Enclose your placeholder in `<div contenteditable="true"></div>` tags
 * Do not add any newlines around the `pre` and `code` tags. These tags read
 their contents very literally, so all newlines will output as newlines.
-* HTML codeblocks can't pick up syntax highlighting. For consistency, if you're
-using fenced codeblocks elsewhere on the same page, set the language to
+* HTML code blocks can't pick up syntax highlighting. For consistency, if you're
+using fenced code blocks elsewhere on the same page, set the language to
 `plaintext`.
 
 **Do:**
+
 {% navtabs codeblock %}
 {% navtab Input %}
 ```
@@ -195,6 +203,7 @@ port: 80 </code></pre></div>
 {% endnavtabs %}
 
 **Don't:**
+
 {% navtabs codeblock %}
 {% navtab Input %}
 ```
@@ -218,13 +227,13 @@ port: 80 </code></pre></div>
   </pre>
 </div>
 {% endnavtab %}
-{% endnavtabs %}
+{% endnavtabs %} -->
 
 ## Tabs
 
 If your topic provides instructions for two or more methods of completing a
 task, you can nest them inside `navtabs`. For example,
-[this topic](https://docs.konghq.com/getting-started-guide/latest/expose-services/#add-a-service)
+[this topic](https://docs.konghq.com/gateway/latest/get-started/comprehensive/expose-services/#add-a-service)
 tabs between the Admin API and Kong Manager methods for adding a Service.
 
 {:.important}
@@ -232,6 +241,7 @@ tabs between the Admin API and Kong Manager methods for adding a Service.
 
 Here's how you use them:
 
+<!-- vale off -->
 {% raw %}
 ```
 {% navtabs %}
@@ -248,6 +258,7 @@ Here's some more content.
 {% endnavtabs %}
 ```
 {% endraw %}
+<!-- vale on -->
 
 And here's the output:
 
@@ -264,16 +275,44 @@ Here's some more content.
 {% endnavtab %}
 {% endnavtabs %}
 
-### Tabs for codeblocks
+You can automatically select a specific tab (or set of tabs) on a page using the `tab` URL parameter.
+For example:
+https://docs.konghq.com/gateway/2.7.x/get-started/comprehensive/protect-services/?tab=using-deck-yaml
+
+The value provided to `?tab` is the lowercase title of the tab, with all non-alphanumeric characters removed and spaces replaced with `-`.
+
+Examples:
+
+* `Using Kong Manager` => `using-kong-manager`
+* `Using the Admin API` => `using-the-admin-api`
+* `Using decK (YAML)` => `using-deck-yaml`
+
+If you're unsure what value to use, view the page source and search for `data-slug` to see the generated slug.
+
+If there are multiple sets of tabs to enable, you can provide multiple tab names, separated by a comma:
+
+```
+?tab=using-the-admin-api,using-deck-yaml
+```
+
+This will activate the `Using the Admin API` tab, then the `Using decK (YAML)` tabs. The order may be important if you are reusing tab names across contexts.
+See this [sample link to the getting started guide with Admin API and decK tabs selected](/gateway/2.7.x/get-started/comprehensive/protect-services/?tab=using-the-admin-api,using-deck-yaml).
+
+When using `?tab=`, it *must* come before any URL fragments (`#`) in the URL:
+
+* <i class="fa fa-check"></i> Good URL: /gateway/2.7.x/get-started/comprehensive/protect-services/?tab=using-deck-yaml#validate-rate-limiting
+* <i class="fa fa-times"></i> Bad URL: /gateway/2.7.x/get-started/comprehensive/protect-services/#validate-rate-limiting/?tab=using-deck-yaml
+
+### Tabs for code blocks
 
 A specialized use of navtabs is the `codeblock` style. This creates copyable
-tabbed codeblocks for easy code comparison and better use of space.
+tabbed code blocks for easy code comparison and better use of space.
 
 {:.important}
-> **Important:** Codeblock tabs must contain codeblocks and **nothing else** --
+> **Important:** Code block tabs must contain code blocks and **nothing else** --
 not even extra blank lines.
 
-To create a tabbed codeblock, set the `codeblock` class in the first element
+To create a tabbed code block, set the `codeblock` class in the first element
 when creating a `navtabs` group:
 
 {% raw %}
@@ -308,6 +347,43 @@ $ httpie some request
 {% endnavtab %}
 {% endnavtabs %}
 
+### Tabs for OSS/Enterprise
+
+{:.important}
+> Important: `navtabs_ee` currently only works for Gateway documentation
+
+When using `navtabs` to render content for both Open Source and Enterprise versions
+of a product, you should use the `navtabs_ee` block instead of `navtabs`. This hides
+the inline tab selection and adds a "Switch to Enterprise/OSS" option on the right hand
+side of the page.
+
+`navtabs_ee` expects the tabs to be called `Kong Gateway` and `Kong Gateway (OSS)`, and
+that the enterprise tab will always be shown first.
+
+Here's an example of how to use them:
+
+<!-- vale off -->
+````
+{% raw %}
+{% navtabs_ee codeblock %}
+{% navtab Kong Gateway %}
+```bash
+This will be shown when Enterprise is selected
+```
+{% endnavtab %}
+{% navtab Kong Gateway (OSS) %}
+```bash
+This will be shown when OSS is selected
+ ```
+{% endnavtab %}
+{% endnavtabs_ee %}
+{% endraw %}
+````
+<!-- vale on -->
+
+The Enterprise tab is shown by default. Add `?install=oss` to your URL if you'd like
+to link to the OSS install instructions for on a page.
+
 ### Indenting tabs in an ordered list
 
 Sometimes you are writing an ordered list of steps and may need to include multiple
@@ -315,9 +391,10 @@ ways to complete the task, like with the Admin API as well as the Kong Manager U
 want to include tabs. Tabs do not indent well though and often reset the numbering of
 ordered lists.
 
-To indent your tabs so you can maintain your numbering, including codeblock tabs,
+To indent your tabs so you can maintain your numbering, including code block tabs,
 you can use the indent filter on a capture of your tabs.
 
+<!-- vale off -->
 {% raw %}
 ```
 {% capture the_code %}
@@ -341,6 +418,7 @@ config.url=<div contenteditable="true">{WEBHOOK_URL}</div></code></pre></div>
 {{ the_code | indent }}
 ```
 {% endraw %}
+<!-- vale on -->
 
 And here's what it looks like:
 
@@ -368,7 +446,7 @@ config.url=<div contenteditable="true">{WEBHOOK_URL}</div></code></pre></div>
 {% endcapture %}
 {{ the_code | indent }}
 
-2. Laugh at all of their awesome puns. Using puns used to be considered a sign of great intelligence afterall. (Without the indent filter)
+2. Laugh at all of their awesome puns. Using puns used to be considered a sign of great intelligence, after all. (Without the indent filter)
 
   {% navtabs codeblock %}
   {% navtab cURL %}
@@ -428,7 +506,7 @@ Set a class on the admonition to display a specific style:
 
 * **Note:** {% raw %}`{:.note}`{% endraw %}
 
-    This is a generic note callout that points out useful information that the
+    This is a generic note block that points out useful information that the
     reader should pay attention to, but won't break anything if it's not followed.
     If you don't use any class at all, the blockquote element defaults to this style.
 
@@ -437,7 +515,7 @@ Set a class on the admonition to display a specific style:
 
 * **Important:** {% raw %}`{:.important}`{% endraw %}
 
-    Use the `important` callout for something that the reader really
+    Use the `important` block for something that the reader really
     needs to pay attention to, otherwise the thing they're trying to do won't work.
 
     {:.important}
@@ -445,7 +523,7 @@ Set a class on the admonition to display a specific style:
 
 * **Warning:** {% raw %}`{:.warning}`{% endraw %}
 
-    Use the `warning` callout for any big breaking changes, or for anything
+    Use the `warning` block for any big breaking changes, or for anything
     irreversible.
 
     {:.warning}
@@ -491,7 +569,7 @@ With this order, the first H3 gets skipped.
 ## Badges
 
 Use badges when you need to label a heading, a page, or some other element as
-a specific Konnect tier or DB-less compatible.
+a specific {{site.konnect_short_name}} tier or DB-less compatible.
 
 Badge | HTML tag | Markdown tag
 ------|----------|-------------
@@ -500,7 +578,9 @@ Badge | HTML tag | Markdown tag
 <span class="badge enterprise"></span> | `<span class="badge enterprise"></span>` | `{:.badge .enterprise}`
 <span class="badge dbless"></span> | `<span class="badge dbless"></span>` | `{:.badge .dbless}`
 <span class="badge beta"></span> | `<span class="badge beta"></span>` | `{:.badge .beta}`
+<span class="badge alpha"></span> | `<span class="badge alpha"></span>` | `{:.badge .alpha}`
 <span class="badge oss"></span> | `<span class="badge oss"></span>` | `{:.badge .oss}`
+<span class="badge konnect"></span> | `<span class="badge konnect"></span>` | `{:.badge .konnect}`
 
 For example, you can use the Markdown tag on headers:
 
@@ -534,3 +614,73 @@ For example:
 ```
 {% endnavtab %}
 {% endnavtabs %}
+
+## Icons
+
+You can add the following classes to any Font Awesome or custom icon:
+
+* `inline`: The icon appears inline with text.
+* `no-image-expand`: The icon won't open in a modal on click.
+
+If you're using the [`konnect_icon`](#konnect-icon) shortcut, both classes are
+already applied to the icons and you don't need to add them manually.
+
+### Unicode icons
+
+We use Unicode icons for common icons such as ✅ &nbsp; and ❌ &nbsp;. To make sure the
+spacing is correct, insert `&nbsp;` after the icon:
+
+```md
+✅ &nbsp; and ❌ &nbsp;
+```
+
+If you don't add it, the icon will look like ❌ this.
+
+### Font Awesome
+
+To use a Font Awesome icon, use an `<i>` HTML tag with the name of the icon
+set as its class.
+
+For example, the following code snippet:
+
+```
+<i class="fas fa-anchor"></i>
+```
+
+Resolves to <i class="fas fa-anchor"></i>.
+
+
+### Custom icons
+
+Custom icons for the Kong docs site are located in the
+[`/_assets/images/icons/`](https://github.com/Kong/docs.konghq.com/tree/main/app/_assets/images/icons)
+directory. To add an icon, ensure it meets the following criteria:
+* SVG format
+* The same icon doesn't already exist in the folder, in Unicode, or in the
+Font Awesome library.
+
+For most custom icons ([except {{site.konnect_short_name}}](#konnect-icons)), access them like
+you would any image in markdown. For example:
+
+```
+![document icon](/assets/images/icons/icn-doc.svg){:.inline .no-image-expand}
+```
+
+This resolves to ![document icon](/assets/images/icons/icn-doc.svg){:.inline .no-image-expand}.
+
+### {{site.konnect_short_name}} icons
+
+{{site.konnect_short_name}} icons can be found in `app/_assets/images/icons/konnect`.
+When adding an icon to this folder, use the naming convention `icn-<name>`.
+
+You can then access a {{site.konnect_short_name}} icon with a shortcut for easy use in text:
+
+<!-- vale off -->
+```
+{% raw %}{% konnect_icon runtimes %}{% endraw %}
+# Uses the icon located at /app/_assets/images/icons/konnect/icn-runtimes.svg
+
+{% raw %}{% konnect_icon dev-portal %}{% endraw %}
+# Uses the icon located at /app/_assets/images/icons/konnect/icn-dev-portal.svg
+```
+<!-- vale on -->
