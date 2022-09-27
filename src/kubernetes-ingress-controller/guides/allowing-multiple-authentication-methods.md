@@ -2,7 +2,7 @@
 title: Allowing Multiple Authentication Methods
 ---
 
-This guide walks you through the steps for configuring multilpe authentication options for consumers using the {{site.kic_product_name}}.
+This guide walks you through the steps for configuring multiple authentication options for consumers using the {{site.kic_product_name}}.
 
 The default behavior for Kong authentication plugins is to require credentials
 for all requests without regard for whether a request has been authenticated

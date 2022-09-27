@@ -76,4 +76,4 @@ the {{site.kic_product_name}}:
 - [Using OpenID-connect plugin](/kubernetes-ingress-controller/{{page.kong_version}}/guides/using-oidc-plugin)
   This guide walks through steps necessary to set up OIDC authentication.
 - [Allow Multiple Authentication Plugins](/kubernetes-ingress-controller/{{page.kong_version}}/guides/allowing-multiple-authentication-methods)
-  This guide walks through the steps for configuring multilpe authentication options for consumers.
+  This guide walks through the steps for configuring multiple authentication options for consumers.
